@@ -10,7 +10,7 @@ class Structure(object):
         self.y = y
 
     def __repr__(self):
-        return f"{self.x};{self.y}"
+        return f"{self.x+1};{self.y+1}"
 
 class Labyrinth(object):
     def __init__(self, fichier):
@@ -24,7 +24,7 @@ class Labyrinth(object):
         self.height = height
 
     def __repr__(self):
-        return f"width = {self.width}, height = {self.height}"
+        return f"width = {self.width+1}, height = {self.height+1}"
     
     def level(self):
         list_elmts = []
@@ -67,6 +67,7 @@ class MacGyver(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.items_found = []
     
     def __repr__(self):
         return f"line {self.x +1}, column {self.y +1}"
@@ -84,6 +85,7 @@ class MacGyver(object):
             if item.x == new_x and item.y == new_y:
                 print ("You've found an item")
                 labyrinth.items.remove(item)
+                self.items_found.append(item)
                 return True
         for passage in labyrinth.passages:
             if passage.x == new_x and passage.y == new_y:
@@ -109,6 +111,7 @@ class MacGyver(object):
         print ("At any time, enter 'quit' to quit")
         while self.movement != "quit":
             print (f"You are {self}")
+            print (f"Items found: {self.items_found}")
             self.movement = input ("Which direction do you want to go?? (z = up, s = down, q = left, d = right): ")
             if self.movement == "z":
                 new_x, new_y = self.x-1, self.y
@@ -139,11 +142,11 @@ class MacGyver(object):
 labyrinth = Labyrinth(fichier_labyrinth)
 labyrinth.level()
 char = MacGyver(labyrinth.start[0].x, labyrinth.start[0].y)
+print (labyrinth)
 print (labyrinth.items)
-print (labyrinth.width)
-print (labyrinth.height)
-print (labyrinth.walls)
+
 char.interaction()
+
 
 ##########################################################
 #                       Pygame                           #
