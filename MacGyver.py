@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 import random
 
-fichier_labyrinthe = "Labyrinthe.txt"
+fichier_labyrinth = "Labyrinth.txt"
 
 class Structure(object):
     def __init__(self, x, y):
@@ -12,7 +12,7 @@ class Structure(object):
     def __repr__(self):
         return f"{self.x};{self.y}"
 
-class Labyrinthe(object):
+class Labyrinth(object):
     def __init__(self, fichier):
         width = 1
         height = 1
@@ -26,41 +26,41 @@ class Labyrinthe(object):
     def __repr__(self):
         return f"width = {self.width}, height = {self.height}"
     
-    def niveau(self):
-        liste_elmts = []
-        liste_murs = []
-        liste_passages = []
-        liste_start = []
-        liste_stop = []
-        liste_items = []
-        with open(fichier_labyrinthe, 'r') as lab:
-            labyrinthe = lab.readlines()
-            for line in labyrinthe:
-                liste_elmts.append(line) 
-        for x in range (self.width):
-            for y in range (self.height):
-                if liste_elmts[x][y] == "x":
-                    mur = Structure(x, y)
-                    liste_murs.append(mur)
-                elif liste_elmts[x][y] == "o":
+    def level(self):
+        list_elmts = []
+        list_walls = []
+        list_passages = []
+        list_start = []
+        list_stop = []
+        list_items = []
+        with open(fichier_labyrinth, 'r') as lab:
+            labyrinth = lab.readlines()
+            for line in labyrinth:
+                list_elmts.append(line) 
+        for x in range (self.height+1):
+            for y in range (self.width+1):
+                if list_elmts[x][y] == "x":
+                    wall = Structure(x, y)
+                    list_walls.append(wall)
+                elif list_elmts[x][y] == "o":
                     passage = Structure(x, y)
-                    liste_passages.append(passage)
-                elif liste_elmts[x][y] == "D":
-                    depart = Structure(x, y)
-                    liste_start.append(depart)
+                    list_passages.append(passage)
+                elif list_elmts[x][y] == "D":
+                    starting_point = Structure(x, y)
+                    list_start.append(starting_point)
                 else:
-                    arrivee = Structure(x, y)
-                    liste_stop.append(arrivee)
-        position_items = random.choices(liste_passages, k=3)
-        for position_passage in position_items:
-            item = Structure(position_passage.x, position_passage.y)
-            liste_items.append(item)
-        self.murs = liste_murs
-        self.passages = liste_passages
-        self.start = liste_start
-        self.stop = liste_stop
-        self.items = liste_items
-        return self.murs, self.passages, self.start, self.stop, self.items
+                    arrive = Structure(x, y)
+                    list_stop.append(arrive)
+        items_position = random.choices(list_passages, k=3)
+        for passage_position in items_position:
+            item = Structure(passage_position.x, passage_position.y)
+            list_items.append(item)
+        self.walls = list_walls
+        self.passages = list_passages
+        self.start = list_start
+        self.stop = list_stop
+        self.items = list_items
+        return self.walls, self.passages, self.start, self.stop, self.items
         
 
 class MacGyver(object):
@@ -69,75 +69,66 @@ class MacGyver(object):
         self.y = y
     
     def __repr__(self):
-        return f"ligne {self.x +1}, colonne {self.y +1}"
+        return f"line {self.x +1}, column {self.y +1}"
     
+    def move(self, new_x, new_y):
+        self.x = new_x
+        self.y = new_y
+
     def checkcase(self, new_x, new_y):
-        for mur in labyrinthe.murs:
-            if mur.x == new_x and mur.y == new_y:
-                print ("La case est prise par un mur")
+        for wall in labyrinth.walls:
+            if wall.x == new_x and wall.y == new_y:
+                print ("There is a wall")
                 return False
-        for item in labyrinthe.items:
+        for item in labyrinth.items:
             if item.x == new_x and item.y == new_y:
-                print ("Vous avez trouvé un objet")
-                labyrinthe.items.remove(item)
+                print ("You've found an item")
+                labyrinth.items.remove(item)
                 return True
-        for passage in labyrinthe.passages:
+        for passage in labyrinth.passages:
             if passage.x == new_x and passage.y == new_y:
-                print ("Case libre")
+                print ("Free to go")
                 return True
-        for depart in labyrinthe.start:
-            if depart.x == new_x and depart.y == new_y:
-                print ("Retour case départ")
+        for starting_point in labyrinth.start:
+            if starting_point.x == new_x and starting_point.y == new_y:
+                print ("You're at the starting point")
                 return True
-        for arrivee in labyrinthe.stop:
-            if arrivee.x == new_x and arrivee.y == new_y:
-                if len(labyrinthe.items) == 0:
-                    print ("Vous avez gagné")
-                else:
-                    print ("Vous n'avez pas trouvé tous les objets\nVous avez perdu")
-                return "quitter"
+        for end_point in labyrinth.stop:
+            if end_point.x == new_x and end_point.y == new_y:
+                self.end_game()
+    
+    def end_game(self):
+        if len(labyrinth.items) == 0:
+            print ("You won")
+        else:
+            print ("You did not found all the items\nYou lost")
+        self.movement = "quit"
 
     def interaction(self):
-        mouvement = 0
-        print ("A n'importe quel moment, entrez 'quitter' pour quitter")
-        while mouvement != "quitter":
-            print (f"Vous êtes {self}")
-            mouvement = input ("Vers où voulez-vous aller?? (z = haut, s = bas, q = gauche, d = doite): ")
-            if mouvement == "z":
-                new_x = self.x-1
-                new_y = self.y
+        self.movement = 0
+        print ("At any time, enter 'quit' to quit")
+        while self.movement != "quit":
+            print (f"You are {self}")
+            self.movement = input ("Which direction do you want to go?? (z = up, s = down, q = left, d = right): ")
+            if self.movement == "z":
+                new_x, new_y = self.x-1, self.y
                 if self.checkcase(new_x, new_y) == True:
-                    self.x = new_x
-                    self.y = new_y
-                elif self.checkcase(new_x, new_y) == "quitter":
-                    mouvement = "quitter"
-            elif mouvement == "s":
-                new_x = self.x+1
-                new_y = self.y
+                    self.move(new_x, new_y)
+            elif self.movement == "s":
+                new_x, new_y = self.x+1, self.y
                 if self.checkcase(new_x, new_y) == True:
-                    self.x = new_x
-                    self.y = new_y
-                elif self.checkcase(new_x, new_y) == "quitter":
-                    mouvement = "quitter"
-            elif mouvement == "q":
-                new_x = self.x
-                new_y = self.y-1
+                    self.move(new_x, new_y)
+            elif self.movement == "q":
+                new_x, new_y = self.x, self.y-1
                 if self.checkcase(new_x, new_y) == True:
-                    self.x = new_x
-                    self.y = new_y
-                elif self.checkcase(new_x, new_y) == "quitter":
-                    mouvement = "quitter"
-            elif mouvement == "d":
-                new_x = self.x
-                new_y = self.y+1
+                    self.move(new_x, new_y)
+            elif self.movement == "d":
+                new_x, new_y = self.x, self.y+1
                 if self.checkcase(new_x, new_y) == True:
-                    self.x = new_x
-                    self.y = new_y
-                elif self.checkcase(new_x, new_y) == "quitter":
-                    mouvement = "quitter"
+                    self.move(new_x, new_y)
             else:
-                if mouvement != "quitter":
-                    print ("Mouvement non reconnu")
+                if self.movement != "quit":
+                    print ("Movement not recognized")
     
 
 
@@ -145,11 +136,14 @@ class MacGyver(object):
 
 
 
-labyrinthe = Labyrinthe(fichier_labyrinthe)
-labyrinthe.niveau()
-perso = MacGyver(labyrinthe.start[0].x, labyrinthe.start[0].y)
-
-perso.interaction()
+labyrinth = Labyrinth(fichier_labyrinth)
+labyrinth.level()
+char = MacGyver(labyrinth.start[0].x, labyrinth.start[0].y)
+print (labyrinth.items)
+print (labyrinth.width)
+print (labyrinth.height)
+print (labyrinth.walls)
+char.interaction()
 
 ##########################################################
 #                       Pygame                           #
@@ -157,15 +151,15 @@ perso.interaction()
 """
 pygame.init()
 
-fenetre = pygame.display.set_mode((640, 480))
+window = pygame.display.set_mode((640, 480))
 pygame.display.set_caption("MacGyver")
 
 
 pygame.display.flip()
 
-continuer = 1
-while continuer:
+continue = 1
+while continue:
 	for event in pygame.event.get():
 		if event.type == QUIT:
-			continuer = 0
+			continue = 0
 """
