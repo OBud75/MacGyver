@@ -83,7 +83,7 @@ class MacGyver(object):
                 return False
         for item in labyrinth.items:
             if item.x == new_x and item.y == new_y:
-                print ("You' ve found an item!!")
+                print ("You've found an item!!")
                 labyrinth.items.remove(item)
                 self.items_found.append(item)
                 return True
@@ -108,7 +108,7 @@ class MacGyver(object):
 
     def interaction(self):
         self.movement = 0
-        print ("At any time, enter 'quit' to quit")
+        print ("At any time, enter 'quit' to quit\n")
         while self.movement != "quit":
             print (f"You are {self}")
             print (f"Items found: {self.items_found}")
