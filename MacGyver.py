@@ -83,17 +83,17 @@ class MacGyver(object):
                 return False
         for item in labyrinth.items:
             if item.x == new_x and item.y == new_y:
-                print ("You've found an item")
+                print ("You' ve found an item!!")
                 labyrinth.items.remove(item)
                 self.items_found.append(item)
                 return True
         for passage in labyrinth.passages:
             if passage.x == new_x and passage.y == new_y:
-                print ("Free to go")
+                print ("Free to go...")
                 return True
         for starting_point in labyrinth.start:
             if starting_point.x == new_x and starting_point.y == new_y:
-                print ("You're at the starting point")
+                print ("You're back at the starting point...")
                 return True
         for end_point in labyrinth.stop:
             if end_point.x == new_x and end_point.y == new_y:
@@ -101,9 +101,9 @@ class MacGyver(object):
     
     def end_game(self):
         if len(labyrinth.items) == 0:
-            print ("You won")
+            print ("You won!!")
         else:
-            print ("You did not found all the items\nYou lost")
+            print ("You did not find all the items...\nYou lost...")
         self.movement = "quit"
 
     def interaction(self):
@@ -112,7 +112,7 @@ class MacGyver(object):
         while self.movement != "quit":
             print (f"You are {self}")
             print (f"Items found: {self.items_found}")
-            self.movement = input ("Which direction do you want to go?? (z = up, s = down, q = left, d = right): ")
+            self.movement = input ("\nWhich direction do you want to go?? (z = up, s = down, q = left, d = right): ")
             if self.movement == "z":
                 new_x, new_y = self.x-1, self.y
                 if self.checkcase(new_x, new_y) == True:
@@ -142,8 +142,8 @@ class MacGyver(object):
 labyrinth = Labyrinth(fichier_labyrinth)
 labyrinth.level()
 char = MacGyver(labyrinth.start[0].x, labyrinth.start[0].y)
-print (labyrinth)
-print (labyrinth.items)
+
+print (f"Item position: {labyrinth.items}")
 
 char.interaction()
 
