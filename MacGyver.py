@@ -68,6 +68,35 @@ class MacGyver(object):
         self.x = x
         self.y = y
     
+    def __repr__(self):
+        return f"ligne {self.x +1}, colonne {self.y +1}"
+    
+    def checkcase(self, new_x, new_y):
+        for mur in labyrinthe.murs:
+            if mur.x == new_x and mur.y == new_y:
+                print ("La case est prise par un mur")
+                return False
+        for item in labyrinthe.items:
+            if item.x == new_x and item.y == new_y:
+                print ("Vous avez trouvé un objet")
+                labyrinthe.items.remove(item)
+                return True
+        for passage in labyrinthe.passages:
+            if passage.x == new_x and passage.y == new_y:
+                print ("Case libre")
+                return True
+        for depart in labyrinthe.start:
+            if depart.x == new_x and depart.y == new_y:
+                print ("Retour case départ")
+                return True
+        for arrivee in labyrinthe.stop:
+            if arrivee.x == new_x and arrivee.y == new_y:
+                if len(labyrinthe.items) == 0:
+                    print ("Vous avez gagné")
+                else:
+                    print ("Vous n'avez pas trouvé tous les objets\nVous avez perdu")
+                return "quitter"
+
     def interaction(self):
         mouvement = 0
         print ("A n'importe quel moment, entrez 'quitter' pour quitter")
@@ -75,116 +104,43 @@ class MacGyver(object):
             print (f"Vous êtes {self}")
             mouvement = input ("Vers où voulez-vous aller?? (z = haut, s = bas, q = gauche, d = doite): ")
             if mouvement == "z":
-                for mur in labyrinthe.murs:
-                    if mur.x == self.x-1 and mur.y == self.y:
-                        print ("La case est prise par un mur")
-                        break
-                for item in labyrinthe.items:
-                    if item.x == self.x-1 and item.y == self.y:
-                        print ("Vous avez trouvé un objet")
-                        labyrinthe.items.remove(item)
-                for passage in labyrinthe.passages:
-                    if passage.x == self.x-1 and passage.y == self.y:
-                        self.x -= 1
-                        break
-                for depart in labyrinthe.start:
-                    if depart.x == self.x-1 and depart.y == self.y:
-                        print ("Retour case départ")
-                        self.x -= 1
-                        break
-                for arrivee in labyrinthe.stop:
-                    if arrivee.x == self.x-1 and arrivee.y == self.y:
-                        if len(labyrinthe.items) == 0:
-                            print ("Vous avez gagné")
-                            mouvement = "quitter"
-                        else:
-                            print ("Vous n'avez pas trouvé tous les objets\nVous avez perdu")
-                            mouvement = "quitter"
+                new_x = self.x-1
+                new_y = self.y
+                if self.checkcase(new_x, new_y) == True:
+                    self.x = new_x
+                    self.y = new_y
+                elif self.checkcase(new_x, new_y) == "quitter":
+                    mouvement = "quitter"
             elif mouvement == "s":
-                for mur in labyrinthe.murs:
-                    if mur.x == self.x+1 and mur.y == self.y:
-                        print ("La case est prise par un mur")
-                        break
-                for item in labyrinthe.items:
-                    if item.x == self.x+1 and item.y == self.y:
-                        print ("Vous avez trouvé un objet")
-                        labyrinthe.items.remove(item)
-                for passage in labyrinthe.passages:
-                    if passage.x == self.x+1 and passage.y == self.y:
-                        self.x += 1
-                        break
-                for depart in labyrinthe.start:
-                    if depart.x == self.x+1 and depart.y == self.y:
-                        print ("Retour case départ")
-                        self.x += 1
-                        break
-                for arrivee in labyrinthe.stop:
-                    if arrivee.x == self.x+1 and arrivee.y == self.y:
-                        if len(labyrinthe.items) == 0:
-                            print ("Vous avez gagné")
-                            mouvement = "quitter"
-                        else:
-                            print ("Vous n'avez pas trouvé tous les objets\nVous avez perdu")
-                            mouvement = "quitter"
+                new_x = self.x+1
+                new_y = self.y
+                if self.checkcase(new_x, new_y) == True:
+                    self.x = new_x
+                    self.y = new_y
+                elif self.checkcase(new_x, new_y) == "quitter":
+                    mouvement = "quitter"
             elif mouvement == "q":
-                for mur in labyrinthe.murs:
-                    if mur.x == self.x and mur.y == self.y-1:
-                        print ("La case est prise par un mur")
-                        break
-                for item in labyrinthe.items:
-                    if item.x == self.x and item.y == self.y-1:
-                        print ("Vous avez trouvé un objet")
-                        labyrinthe.items.remove(item)
-                for passage in labyrinthe.passages:
-                    if passage.x == self.x and passage.y == self.y-1:
-                        self.y -= 1
-                        break
-                for depart in labyrinthe.start:
-                    if depart.x == self.x and depart.y == self.y-1:
-                        print ("Retour case départ")
-                        self.y -= 1
-                        break
-                for arrivee in labyrinthe.stop:
-                    if arrivee.x == self.x and arrivee.y == self.y-1:
-                        if len(labyrinthe.items) == 0:
-                            print ("Vous avez gagné")
-                            mouvement = "quitter"
-                        else:
-                            print ("Vous n'avez pas trouvé tous les objets\nVous avez perdu")
-                            mouvement = "quitter"
+                new_x = self.x
+                new_y = self.y-1
+                if self.checkcase(new_x, new_y) == True:
+                    self.x = new_x
+                    self.y = new_y
+                elif self.checkcase(new_x, new_y) == "quitter":
+                    mouvement = "quitter"
             elif mouvement == "d":
-                for mur in labyrinthe.murs:
-                    if mur.x == self.x and mur.y == self.y+1:
-                        print ("La case est prise par un mur")
-                        break
-                for item in labyrinthe.items:
-                    if item.x == self.x and item.y == self.y+1:
-                        print ("Vous avez trouvé un objet")
-                        labyrinthe.items.remove(item)
-                for passage in labyrinthe.passages:
-                    if passage.x == self.x and passage.y == self.y+1:
-                        self.y += 1
-                        break
-                for depart in labyrinthe.start:
-                    if depart.x == self.x and depart.y == self.y+1:
-                        print ("Retour case départ")
-                        self.y += 1
-                        break
-                for arrivee in labyrinthe.stop:
-                    if arrivee.x == self.x and arrivee.y == self.y+1:
-                        if len(labyrinthe.items) == 0:
-                            print ("Vous avez gagné")
-                            mouvement = "quitter"
-                        else:
-                            print ("Vous n'avez pas trouvé tous les objets\nVous avez perdu")
-                            mouvement = "quitter"
+                new_x = self.x
+                new_y = self.y+1
+                if self.checkcase(new_x, new_y) == True:
+                    self.x = new_x
+                    self.y = new_y
+                elif self.checkcase(new_x, new_y) == "quitter":
+                    mouvement = "quitter"
             else:
                 if mouvement != "quitter":
                     print ("Mouvement non reconnu")
     
 
-    def __repr__(self):
-        return f"ligne {self.x +1}, colonne {self.y +1}"
+
 
 
 
