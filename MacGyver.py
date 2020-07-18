@@ -205,7 +205,7 @@ char.interaction()
 ##########################################################
 #                       Pygame                           #
 ##########################################################
-"""
+
 pygame.init()
 
 window = pygame.display.set_mode((640, 480))
@@ -214,9 +214,8 @@ pygame.display.set_caption("MacGyver")
 
 pygame.display.flip()
 
-continue = 1
-while continue:
+display = 1
+while display:
 	for event in pygame.event.get():
 		if event.type == QUIT:
-			continue = 0
-"""
+			display = 0
