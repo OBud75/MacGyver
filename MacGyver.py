@@ -2,21 +2,36 @@ import pygame
 from pygame.locals import *
 import random
 
-fichier_labyrinth = "Labyrinth.txt"
+file_labyrinth = "Labyrinth.txt"
 
 class Structure(object):
     def __init__(self, x, y):
+        """
+            Create each blocks of the labyrinth:
+            walls, passages, starting point,
+            arriving point and items
+
+        Args:
+            x (int): Row
+            y (int): Column
+        """
         self.x = x
         self.y = y
 
     def __repr__(self):
         return f"{self.x+1};{self.y+1}"
 
+
 class Labyrinth(object):
-    def __init__(self, fichier):
+    def __init__(self, file):
+        """Initialisation of the labytinth
+
+        Args:
+            file (.txt): File where the labyrinth is drawn
+        """
         width = 1
         height = 1
-        for ligne in fichier:
+        for ligne in file:
             height +=1
             for case in ligne:
                 width +=1
@@ -27,18 +42,27 @@ class Labyrinth(object):
         return f"width = {self.width+1}, height = {self.height+1}"
     
     def level(self):
+        """Create elmts using Structure class
+           Using the .txt file as follow
+           "x" will be walls
+           "o" will be passages
+           "D" for departure
+           "A" for arrive
+        """
         list_elmts = []
         list_walls = []
         list_passages = []
         list_start = []
         list_stop = []
-        list_items = []
-        with open(fichier_labyrinth, 'r') as lab:
+        #Passing the .txt draw to a list of elements
+        with open(file_labyrinth, 'r') as lab:
             labyrinth = lab.readlines()
             for line in labyrinth:
-                list_elmts.append(line) 
+                list_elmts.append(line)
+        #For each raw(x) of each column(y)
         for x in range (self.height+1):
             for y in range (self.width+1):
+                #Check element and create appropriated structure
                 if list_elmts[x][y] == "x":
                     wall = Structure(x, y)
                     list_walls.append(wall)
@@ -51,20 +75,28 @@ class Labyrinth(object):
                 else:
                     arrive = Structure(x, y)
                     list_stop.append(arrive)
+        #Creating 3 items in random positions in passages
+        list_items = []
         items_position = random.choices(list_passages, k=3)
         for passage_position in items_position:
             item = Structure(passage_position.x, passage_position.y)
             list_items.append(item)
+        #Passing lists to class attributes
         self.walls = list_walls
         self.passages = list_passages
         self.start = list_start
         self.stop = list_stop
         self.items = list_items
-        return self.walls, self.passages, self.start, self.stop, self.items
         
 
 class MacGyver(object):
     def __init__(self, x, y):
+        """Create the main character
+
+        Args:
+            x (int): Position (row)
+            y (int): Position (column)
+        """
         self.x = x
         self.y = y
         self.items_found = []
@@ -73,10 +105,25 @@ class MacGyver(object):
         return f"line {self.x +1}, column {self.y +1}"
     
     def move(self, new_x, new_y):
+        """Called to move if check_block returns True
+
+        Args:
+            new_x (int): New row
+            new_y (int): New column
+        """
         self.x = new_x
         self.y = new_y
 
-    def checkcase(self, new_x, new_y):
+    def check_block(self, new_x, new_y):
+        """Called when user is trying to move
+
+        Args:
+            new_x (int): Row the user is trying to go
+            new_y (int): Column the user is trying to go
+
+        Returns:
+            Bool: Is the block free to go?
+        """
         for wall in labyrinth.walls:
             if wall.x == new_x and wall.y == new_y:
                 print ("There is a wall")
@@ -100,6 +147,12 @@ class MacGyver(object):
                 self.end_game()
     
     def end_game(self):
+        """Called by check_block when case is end point
+           list_items empty when reaching it??
+           If yes then he won
+           If not then he lost
+           Quit the game
+        """
         if len(labyrinth.items) == 0:
             print ("You won!!")
         else:
@@ -107,6 +160,12 @@ class MacGyver(object):
         self.movement = "quit"
 
     def interaction(self):
+        """User can quit typing 'quit'
+           Asking for direction
+           zsqd because french keyboard
+           Calling check_block function
+           If check_block is True then calls method move
+        """
         self.movement = 0
         print ("At any time, enter 'quit' to quit\n")
         while self.movement != "quit":
@@ -115,31 +174,26 @@ class MacGyver(object):
             self.movement = input ("\nWhich direction do you want to go?? (z = up, s = down, q = left, d = right): ")
             if self.movement == "z":
                 new_x, new_y = self.x-1, self.y
-                if self.checkcase(new_x, new_y) == True:
+                if self.check_block(new_x, new_y) == True:
                     self.move(new_x, new_y)
             elif self.movement == "s":
                 new_x, new_y = self.x+1, self.y
-                if self.checkcase(new_x, new_y) == True:
+                if self.check_block(new_x, new_y) == True:
                     self.move(new_x, new_y)
             elif self.movement == "q":
                 new_x, new_y = self.x, self.y-1
-                if self.checkcase(new_x, new_y) == True:
+                if self.check_block(new_x, new_y) == True:
                     self.move(new_x, new_y)
             elif self.movement == "d":
                 new_x, new_y = self.x, self.y+1
-                if self.checkcase(new_x, new_y) == True:
+                if self.check_block(new_x, new_y) == True:
                     self.move(new_x, new_y)
             else:
                 if self.movement != "quit":
                     print ("Movement not recognized")
     
 
-
-
-
-
-
-labyrinth = Labyrinth(fichier_labyrinth)
+labyrinth = Labyrinth(file_labyrinth)
 labyrinth.level()
 char = MacGyver(labyrinth.start[0].x, labyrinth.start[0].y)
 
