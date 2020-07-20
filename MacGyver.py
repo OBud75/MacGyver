@@ -39,7 +39,7 @@ class Labyrinth(object):
         self.height = height
 
     def __repr__(self):
-        return f"width = {self.width+1}, height = {self.height+1}"
+        return f"width = {self.width}, height = {self.height}"
     
     def level(self):
         """Create elmts using Structure class
@@ -102,7 +102,7 @@ class MacGyver(object):
         self.items_found = []
     
     def __repr__(self):
-        return f"line {self.x +1}, column {self.y +1}"
+        return f"Row {self.x +1}, column {self.y +1}"
     
     def move(self, new_x, new_y):
         """Called to move if check_block returns True
@@ -123,6 +123,7 @@ class MacGyver(object):
 
         Returns:
             Bool: Is the block free to go?
+            Calls end_game method if block is ending point
         """
         for wall in labyrinth.walls:
             if wall.x == new_x and wall.y == new_y:
@@ -147,7 +148,7 @@ class MacGyver(object):
                 self.end_game()
     
     def end_game(self):
-        """Called by check_block when case is end point
+        """Called by check_block when block is end point
            list_items empty when reaching it??
            If yes then he won
            If not then he lost
@@ -161,9 +162,7 @@ class MacGyver(object):
 
     def interaction(self):
         """User can quit typing 'quit'
-           Asking for direction
-           zsqd because french keyboard
-           Calling check_block function
+           Asking for direction and calling check_block function
            If check_block is True then calls method move
         """
         self.movement = 0
@@ -174,48 +173,72 @@ class MacGyver(object):
             self.movement = input ("\nWhich direction do you want to go?? (z = up, s = down, q = left, d = right): ")
             if self.movement == "z":
                 new_x, new_y = self.x-1, self.y
-                if self.check_block(new_x, new_y) == True:
+                if self.check_block(new_x, new_y):
                     self.move(new_x, new_y)
             elif self.movement == "s":
                 new_x, new_y = self.x+1, self.y
-                if self.check_block(new_x, new_y) == True:
+                if self.check_block(new_x, new_y):
                     self.move(new_x, new_y)
             elif self.movement == "q":
                 new_x, new_y = self.x, self.y-1
-                if self.check_block(new_x, new_y) == True:
+                if self.check_block(new_x, new_y):
                     self.move(new_x, new_y)
             elif self.movement == "d":
                 new_x, new_y = self.x, self.y+1
-                if self.check_block(new_x, new_y) == True:
+                if self.check_block(new_x, new_y):
                     self.move(new_x, new_y)
             else:
                 if self.movement != "quit":
                     print ("Movement not recognized")
-    
+
 
 labyrinth = Labyrinth(file_labyrinth)
 labyrinth.level()
-char = MacGyver(labyrinth.start[0].x, labyrinth.start[0].y)
-
-print (f"Item position: {labyrinth.items}")
-
-char.interaction()
+macgyver = MacGyver(labyrinth.start[0].x, labyrinth.start[0].y)
+print (f"\nItem position: {labyrinth.items}")
+macgyver.interaction()
 
 
 ##########################################################
 #                       Pygame                           #
 ##########################################################
 
+width = 800
+height = 800
+
+def launch (name, icone, refreshtime = 100, width = width, height = height):
+    global window
+    window = pygame.display.set_mode((width, height))
+    pygame.display.set_caption(name)
+    pygame.display.set_icon(pygame.image.load(icone))
+    pygame.display.flip()
+    pygame.time.delay(refreshtime)
+
+def visual(image, x, y, width = width, height = height):
+    window.blit(pygame.image.load(image), (round(x*(width/(labyrinth.width+1))+5), round(y*(height/(labyrinth.height+1))+5)))
+
+
 pygame.init()
 
-window = pygame.display.set_mode((640, 480))
-pygame.display.set_caption("MacGyver")
+launch("MacGyver", "Images/MacGyver.png")
 
+run = True
+while run == True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+    for wall in labyrinth.walls:
+        visual("Images/wall.png", wall.y, wall.x)
+    for passage in labyrinth.passages:
+        visual("Images/passage.png", passage.y, passage.x)
+    for start in labyrinth.start:
+        visual("Images/start_stop.png", start.y, start.x)
+    for stop in labyrinth.stop:
+        visual("Images/start_stop.png", stop.y, stop.x)
+    for end in labyrinth.stop:
+        visual("Images/Gardien.png", end.y, end.x)
+    visual("Images/MacGyver.png", macgyver.y, macgyver.x)
+    
+    pygame.display.update()
 
-pygame.display.flip()
-
-display = 1
-while display:
-	for event in pygame.event.get():
-		if event.type == QUIT:
-			display = 0
+pygame.quit()
