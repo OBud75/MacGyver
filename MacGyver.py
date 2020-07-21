@@ -59,7 +59,7 @@ class Labyrinth(object):
             labyrinth = lab.readlines()
             for line in labyrinth:
                 list_elmts.append(line)
-        #For each raw(x) of each column(y)
+        #For each raw of each column
         for x in range (self.height+1):
             for y in range (self.width+1):
                 #Check element and create appropriated structure
@@ -76,17 +76,17 @@ class Labyrinth(object):
                     arrive = Structure(x, y)
                     list_stop.append(arrive)
         #Creating 3 items in random positions in passages
-        list_items = []
+        items = {}
         items_position = random.choices(list_passages, k=3)
-        for passage_position in items_position:
-            item = Structure(passage_position.x, passage_position.y)
-            list_items.append(item)
+        for i in range(len(items_position)):
+            item = Structure(items_position[i].x, items_position[i].y)
+            items[i] = item
         #Passing lists to class attributes
         self.walls = list_walls
         self.passages = list_passages
         self.start = list_start
         self.stop = list_stop
-        self.items = list_items
+        self.items = items
         
 
 class MacGyver(object):
@@ -129,11 +129,11 @@ class MacGyver(object):
             if wall.x == new_x and wall.y == new_y:
                 print ("There is a wall")
                 return False
-        for item in labyrinth.items:
-            if item.x == new_x and item.y == new_y:
+        for key in labyrinth.items.keys():
+            if labyrinth.items[key].x == new_x and labyrinth.items[key].y == new_y:
                 print ("You've found an item!!")
-                labyrinth.items.remove(item)
-                self.items_found.append(item)
+                del labyrinth.items[key]
+                self.items_found.append(key)
                 return True
         for passage in labyrinth.passages:
             if passage.x == new_x and passage.y == new_y:
@@ -159,11 +159,13 @@ class MacGyver(object):
         else:
             print ("You did not find all the items...\nYou lost...")
         self.movement = "quit"
+        global run
+        run = False
 
     def interaction(self):
         """User can quit typing 'quit'
-           Asking for direction and calling check_block function
-           If check_block is True then calls method move
+            Asking for direction and calling check_block function
+            If check_block is True then calls method move
         """
         self.movement = 0
         print ("At any time, enter 'quit' to quit\n")
@@ -191,13 +193,29 @@ class MacGyver(object):
                 if self.movement != "quit":
                     print ("Movement not recognized")
 
+    def moving_in_screen(self):
+        print (macgyver.items_found)
+        if event.key == pygame.K_UP:
+            new_x, new_y = self.x-1, self.y
+            if self.check_block(new_x, new_y):
+                self.move(new_x, new_y)
+        elif event.key == pygame.K_DOWN:
+            new_x, new_y = self.x+1, self.y
+            if self.check_block(new_x, new_y):
+                self.move(new_x, new_y)
+        elif event.key == pygame.K_LEFT:
+            new_x, new_y = self.x, self.y-1
+            if self.check_block(new_x, new_y):
+                self.move(new_x, new_y)
+        elif event.key == pygame.K_RIGHT:
+            new_x, new_y = self.x, self.y+1
+            if self.check_block(new_x, new_y):
+                self.move(new_x, new_y)
 
+#Initialization labyrinth and character
 labyrinth = Labyrinth(file_labyrinth)
 labyrinth.level()
 macgyver = MacGyver(labyrinth.start[0].x, labyrinth.start[0].y)
-print (f"\nItem position: {labyrinth.items}")
-macgyver.interaction()
-
 
 ##########################################################
 #                       Pygame                           #
@@ -224,21 +242,36 @@ launch("MacGyver", "Images/MacGyver.png")
 
 run = True
 while run == True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+    #Visuals for walls and passages
     for wall in labyrinth.walls:
         visual("Images/wall.png", wall.y, wall.x)
     for passage in labyrinth.passages:
         visual("Images/passage.png", passage.y, passage.x)
-    for start in labyrinth.start:
-        visual("Images/start_stop.png", start.y, start.x)
-    for stop in labyrinth.stop:
-        visual("Images/start_stop.png", stop.y, stop.x)
-    for end in labyrinth.stop:
-        visual("Images/Gardien.png", end.y, end.x)
+    #Visuals for items
+    try:
+        visual("Images/ether.png", labyrinth.items[0].y, labyrinth.items[0].x)
+    except KeyError:
+        pass
+    try:
+        visual("Images/aiguille.png", labyrinth.items[1].y, labyrinth.items[1].x)
+    except KeyError:
+        pass
+    try:
+        visual("Images/tube_plastique.png", labyrinth.items[2].y, labyrinth.items[2].x)
+    except KeyError:
+        pass
+    #Visuals for start and end point, MacGyver and Guardian
+    visual("Images/start_stop.png", labyrinth.start[0].y, labyrinth.start[0].x)
+    visual("Images/start_stop.png", labyrinth.stop[0].y, labyrinth.stop[0].x)
+    visual("Images/Gardien.png", labyrinth.stop[0].y, labyrinth.stop[0].x)
     visual("Images/MacGyver.png", macgyver.y, macgyver.x)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        if event.type == pygame.KEYDOWN:
+            macgyver.moving_in_screen()
     
     pygame.display.update()
-
+    
 pygame.quit()
