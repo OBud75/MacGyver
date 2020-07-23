@@ -1,34 +1,16 @@
 import Maze
 
 class MacGyver(object):
-    def __init__(self, x, y):
+    def __init__(self):
         """Create the main character
-
         Args:
             x (int): Position (row)
             y (int): Position (column)
         """
-        self.x = x
-        self.y = y
+        self.x = Maze.Labyrinth().start[0].x
+        self.y = Maze.Labyrinth().start[0].y
         self.items_found = []
         self.game_over = False
-
-        self.file = "Labyrinth.txt"
-        width = 1
-        height = 1
-        for ligne in self.file:
-            height +=1
-            for case in ligne:
-                width +=1
-        self.width = width
-        self.height = height
-        self.walls, self.passages, self.start, self.stop, self.items = Maze.Labyrinth.level(self)
-
-    def __getattr__(self, name):
-        return getattr(Maze.Labyrinth, name)
-
-    def __repr__(self):
-        return f"Row {self.x +1}, column {self.y +1}"
     
     def interaction(self):
         """User can quit typing 'quit'
@@ -37,7 +19,7 @@ class MacGyver(object):
         """
         print ("At any time, enter 'quit' to quit\n")
         while not self.game_over:
-            print (f"You are {self}")
+            print (f"You are row {self.x+1}, column {self.y+1}")
             print (f"Items found: {self.items_found}")
             self.movement = input ("\nWhich direction do you want to go?? (z = up, s = down, q = left, d = right): ")
             if self.movement == "z":
@@ -52,12 +34,11 @@ class MacGyver(object):
                 if self.movement != "quit":
                     print ("Movement not recognized")
                     new_x, new_y = self.x, self.y
-            if Maze.Labyrinth.check_block(self, new_x, new_y):
+            if Maze.Labyrinth.check_block(Maze.Labyrinth(), new_x, new_y):
                 self.move(new_x, new_y)
 
     def move(self, new_x, new_y):
         """Called to move if check_block returns True
-
         Args:
             new_x (int): New row
             new_y (int): New column

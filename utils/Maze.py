@@ -5,7 +5,6 @@ import Character
 class Labyrinth(object):
     def __init__(self):
         """Initialisation of the labytinth
-
         Args:
             file (.txt): File where the labyrinth is drawn
         """
@@ -18,21 +17,7 @@ class Labyrinth(object):
                 width +=1
         self.width = width
         self.height = height
-
-    def __repr__(self):
-        return f"width = {self.width}, height = {self.height}"
-
-    def level(self):
-        """Create elmts using Structure class
-        Using the .txt file as follow
-        "x" for be walls
-        "o" for be passages
-        "D" for departure
-        "A" for arrive
-
-        Returns:
-            Lists: Structure of the labyrinth
-        """
+        #Creating the structure of the labyrinth
         list_elmts = []
         list_walls = []
         list_passages = []
@@ -70,7 +55,6 @@ class Labyrinth(object):
         self.start = list_start
         self.stop = list_stop
         self.items = items
-        return self.walls, self.passages, self.start, self.stop, self.items
 
     def check_block(self, new_x, new_y):
         """Called when user is trying to move
@@ -88,7 +72,7 @@ class Labyrinth(object):
         for key in self.items.keys():
             if self.items[key].x == new_x and self.items[key].y == new_y:
                 del self.items[key]
-                Character.MacGyver.finding_item(self, key)
+                Character.MacGyver.finding_item(Character.MacGyver(), key)
                 return True
         for passage in self.passages:
             if passage.x == new_x and passage.y == new_y:
@@ -100,8 +84,8 @@ class Labyrinth(object):
                 return True
         for end_point in self.stop:
             if end_point.x == new_x and end_point.y == new_y:
-                Labyrinth.end_game(self)
-    
+                self.end_game()
+
     def end_game(self):
         """Called by check_block when block is end point
            list_items empty when reaching it??
@@ -113,4 +97,4 @@ class Labyrinth(object):
             print ("You won!!")
         else:
             print ("You did not find all the items...\nYou lost...")
-        self.game_over = True
+        Character.MacGyver().game_over = True

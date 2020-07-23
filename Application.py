@@ -9,12 +9,12 @@ from utils import Character
 
 def initialization():
     labyrinth = Maze.Labyrinth()
-    labyrinth.level()
-    macgyver = Character.MacGyver(labyrinth.start[0].x, labyrinth.start[0].y)
+    macgyver = Character.MacGyver()
     return labyrinth, macgyver
 
 def main():
     labyrinth, macgyver = initialization()
+    print (labyrinth.items)
     macgyver.interaction()
     
 
