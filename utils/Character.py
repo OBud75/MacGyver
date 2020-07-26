@@ -1,5 +1,6 @@
 import Maze
 import pygame
+import Graphics
 
 class MacGyver(object):
     def __init__(self, labyrinth):
@@ -11,6 +12,7 @@ class MacGyver(object):
         self.x = self.labyrinth.start[0].x
         self.y = self.labyrinth.start[0].y
         self.items_found = []
+        self.game = Graphics.Game(self.labyrinth, self)
 
     def interaction(self):
         """Trying to move, provisory block is new_x and new_y
@@ -32,9 +34,15 @@ class MacGyver(object):
             self.macgyver.x, self.macgyver.y = new_x, new_y
     
     def finding_item(self, item):
-        print (f"You've found item: {item['Name']}")
+        """Method called when check_block finds an item
+        If user found all the items he create a syringe
+
+        Args:
+            item (object): Item found
+        """
+        self.game.show_text(f"You've found item: {item['Name']}", 1, 1, 1)
         self.items_found.append(item['Name'])
         if len(self.items_found) == 3:
-            print ("Compiling items...\nSyringe created!!")
+            self.game.show_text("Compiling items...\nSyringe created!!", 5, 5, 1.5)
             syringe = {"Name": "Syringe", "Image": "Images/seringue.png"}
             self.items_found = syringe["Name"]

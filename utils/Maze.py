@@ -1,6 +1,8 @@
 import random
 import Structure
 import Character
+import Graphics
+import pygame
 
 class Labyrinth(object):
     def __init__(self, file):
@@ -54,8 +56,9 @@ class Labyrinth(object):
             {"Name": "Ether", "x": items_position[0].x, "y": items_position[0].y, "Image": "ether.png"},
             {"Name": "Needle", "x": items_position[1].x, "y": items_position[1].y, "Image": "aiguille.png"},
             {"Name": "Plastic tube",  "x": items_position[2].x, "y": items_position[2].y, "Image": "tube_plastique.png"}]
-        #Character in the labyrinth
+        #Character and display in the labyrinth
         self.macgyver = Character.MacGyver(self)
+        self.game = Graphics.Game(self, self.macgyver)
         #Stop the loop
         self.game_over = False
     
@@ -69,7 +72,6 @@ class Labyrinth(object):
         """
         for wall in self.walls:
             if wall.x == new_x and wall.y == new_y:
-                print ("There is a wall")
                 return False
         for item in self.items:
             if item["x"] == new_x and item["y"] == new_y:
@@ -78,11 +80,9 @@ class Labyrinth(object):
                 return True
         for passage in self.passages:
             if passage.x == new_x and passage.y == new_y:
-                print ("Free to go...")
                 return True
         for starting_point in self.start:
             if starting_point.x == new_x and starting_point.y == new_y:
-                print ("You're back at the starting point...")
                 return True
         for end_point in self.stop:
             if end_point.x == new_x and end_point.y == new_y:
@@ -92,7 +92,8 @@ class Labyrinth(object):
         """Check if user got all the items
         If yes he won, else he lost
         """
-        print ("Fighting guardian...")
+        self.game.show_text("Fighting guardian...", 1, 2, 1)
+        pygame.time.wait(1000)
         if len(self.items) == 0:
             print ("Using syringe...\nSeems to work!!\nYou won!!")
         else:
