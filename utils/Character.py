@@ -13,6 +13,10 @@ class MacGyver(object):
         self.items_found = []
 
     def interaction(self):
+        """Trying to move, provisory block is new_x and new_y
+        Call check_block to know if provisory block is available
+        Then update self.x and self.y dipeding on the result
+        """
         if self.event.key == pygame.K_UP:
             new_x, new_y = self.macgyver.x-1, self.macgyver.y
         elif self.event.key == pygame.K_DOWN:

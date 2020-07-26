@@ -9,7 +9,7 @@ class Labyrinth(object):
         'x' for walls
         'D' for departure
         'A' for arrive
-        Items will be create randomply in passages positions
+        Items will be create randomly in passages positions
 
         Args:
             file (.txt): File with the draw of the labyrinth
@@ -51,11 +51,13 @@ class Labyrinth(object):
         #Creating items in random positions in passages
         items_position = random.choices(self.passages, k=3)
         self.items = [
-            {"Name": "Ether", "x": items_position[0].x, "y": items_position[0].y, "Image": "Images/ether.png"},
-            {"Name": "Needle", "x": items_position[1].x, "y": items_position[1].y, "Image": "Images/aiguille.png"},
-            {"Name": "Plastic tube",  "x": items_position[2].x, "y": items_position[2].y, "Image": "Images/tube_plastic.png"}]
+            {"Name": "Ether", "x": items_position[0].x, "y": items_position[0].y, "Image": "ether.png"},
+            {"Name": "Needle", "x": items_position[1].x, "y": items_position[1].y, "Image": "aiguille.png"},
+            {"Name": "Plastic tube",  "x": items_position[2].x, "y": items_position[2].y, "Image": "tube_plastique.png"}]
         #Character in the labyrinth
         self.macgyver = Character.MacGyver(self)
+        #Stop the loop
+        self.game_over = False
     
     def check_block(self, new_x, new_y):
         """Called when user is trying to move
@@ -95,3 +97,4 @@ class Labyrinth(object):
             print ("Using syringe...\nSeems to work!!\nYou won!!")
         else:
             print ("You lost...")
+        self.game_over = True

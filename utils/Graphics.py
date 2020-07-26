@@ -24,8 +24,8 @@ class Game(object):
 
     def game_loop(self):
         pygame.init()
-        while True:
-            #Display labyrinth structure
+        while self.labyrinth.game_over == False:
+            #Structure of the labyrinth display
             for wall in self.labyrinth.walls:
                 self.visual(os.path.join(Game.path_images, "wall.png"), wall.x, wall.y)
             for passage in self.labyrinth.passages:
@@ -35,14 +35,15 @@ class Game(object):
             for stop in self.labyrinth.stop:
                 self.visual(os.path.join(Game.path_images, "start_stop.png"), stop.x, stop.y)
                 self.visual(os.path.join(Game.path_images, "Gardien.png"), stop.x, stop.y)
+            #Items display
             for item in self.labyrinth.items:
-                self.visual(os.path.join(Game.path_images, "ether.png"), item["x"], item["y"])
-            #Display MacGyver
+                self.visual(os.path.join(Game.path_images, item["Image"]), item["x"], item["y"])
+            #MacGyver Display
             self.visual(os.path.join(Game.path_images, "MacGyver.png"), self.macgyver.x, self.macgyver.y)
             #Event handler
             for self.event in pygame.event.get():
                 if self.event.type == pygame.QUIT:
-                    pass
+                    self.labyrinth.game_over = True
                 elif self.event.type == pygame.KEYDOWN:
                     Character.MacGyver.interaction(self)
             #Update screen        
