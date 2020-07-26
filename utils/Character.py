@@ -19,9 +19,8 @@ class MacGyver(object):
         print ("At any time, enter 'quit' to quit\n")
         while not self.labyrinth.game_over:
             print (f"You are row {self.x+1}, column {self.y+1}")
-            print ("Items found:")
-            for item in self.labyrinth.macgyver.items_found:
-                print (f"{item['Name']}")
+            if self.labyrinth.macgyver.items_found:
+                print (f"Items: {self.labyrinth.macgyver.items_found}")
             self.movement = input ("\nWhich direction do you want to go?? (z = up, s = down, q = left, d = right): ")
             if self.movement == "z":
                 new_x, new_y = self.x-1, self.y
@@ -42,6 +41,8 @@ class MacGyver(object):
     
     def finding_item(self, item):
         print (f"You've found item: {item['Name']}")
-        self.items_found.append(item)
+        self.items_found.append(item['Name'])
         if len(self.items_found) == 3:
             print ("Compiling items...\nSyringe created!!")
+            syringe = {"Name": "Syringe", "Image": "Images/seringue.png"}
+            self.items_found = syringe["Name"]

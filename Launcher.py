@@ -14,7 +14,6 @@ def initialization():
 
 def main():
     labyrinth, macgyver = initialization()
-    print (labyrinth.items)
     macgyver.interaction()
     
 

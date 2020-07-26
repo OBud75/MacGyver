@@ -26,35 +26,28 @@ class Labyrinth(object):
         self.height = height
         #Creating the structure of the labyrinth
         list_elmts = []
-        list_walls = []
-        list_passages = []
-        list_start = []
-        list_stop = []
-        #Passing the .txt draw to a list of elements
         with open(self.file, 'r') as lab:
             for line in lab.readlines():
                 list_elmts.append(line)
-        #For each raw of each column
+        #Check element and create appropriated structure
+        self.walls = []
+        self.passages = []
+        self.start = []
+        self.stop = []
         for x in range (self.height+1):
             for y in range (self.width+1):
-                #Check element and create appropriated structure
                 if list_elmts[x][y] == "x":
                     wall = Structure.Blocks(x, y)
-                    list_walls.append(wall)
+                    self.walls.append(wall)
                 elif list_elmts[x][y] == "o":
                     passage = Structure.Blocks(x, y)
-                    list_passages.append(passage)
+                    self.passages.append(passage)
                 elif list_elmts[x][y] == "D":
                     starting_point = Structure.Blocks(x, y)
-                    list_start.append(starting_point)
+                    self.start.append(starting_point)
                 else:
                     arrive = Structure.Blocks(x, y)
-                    list_stop.append(arrive)
-        #Passing lists to instance attributes
-        self.walls = list_walls
-        self.passages = list_passages
-        self.start = list_start
-        self.stop = list_stop
+                    self.stop.append(arrive)
         #Creating items in random positions in passages
         items_position = random.choices(self.passages, k=3)
         self.items = [
@@ -98,7 +91,7 @@ class Labyrinth(object):
     def arriving_point(self):
         print ("Fighting guardian...")
         if len(self.items) == 0:
-            print ("Using syringe to shoot the guardian...\nYou won!!")
+            print ("Using syringe...\nSeems to work!!\nYou won!!")
         else:
-            print ("You did not find all the items...\nYou lost...")
+            print ("You lost...")
         self.game_over = True
