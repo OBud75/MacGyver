@@ -4,6 +4,16 @@ import Character
 
 class Labyrinth(object):
     def __init__(self, file):
+        """Create the structure of the labyrinth
+        'o' for passages
+        'x' for walls
+        'D' for departure
+        'A' for arrive
+        Items will be create randomply in passages positions
+
+        Args:
+            file (.txt): File with the draw of the labyrinth
+        """
         #File needed with the drawing of the labyrinth
         self.file = file
         width = 1
@@ -53,8 +63,9 @@ class Labyrinth(object):
         items["Plastic tube"] = Structure.Blocks(items_position[2].x, items_position[2].y)
         self.items = items
         #Will stop the game when MacGyver reach arriving point
-        self.macgyver = Character.MacGyver(self.start[0].x, self.start[0].y, self)
         self.game_over = False
+        #Character in the labyrinth
+        self.macgyver = Character.MacGyver(self)
     
     def check_block(self, new_x, new_y):
         """Called when user is trying to move
@@ -89,7 +100,7 @@ class Labyrinth(object):
     def arriving_point(self):
         print ("Fighting guardian...")
         if len(self.items) == 0:
-            print ("You won!!")
+            print ("Using syringe to shoot the guardian...\nYou won!!")
         else:
             print ("You did not find all the items...\nYou lost...")
         self.game_over = True

@@ -1,17 +1,15 @@
 import Maze
 
 class MacGyver(object):
-    def __init__(self, x, y, labyrinth):
+    def __init__(self, labyrinth):
         """Create the main character
         Args:
-            x (int): Position (row)
-            y (int): Position (column)
             labyrinth (object): Labyrinth in which MacGyver is trapped
         """
-        self.x = x
-        self.y = y
-        self.items_found = []
         self.labyrinth = labyrinth
+        self.x = labyrinth.start[0].x
+        self.y = labyrinth.start[0].y
+        self.items_found = []
 
     def interaction(self):
         """User can quit typing 'quit'
