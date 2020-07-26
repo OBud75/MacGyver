@@ -1,20 +1,18 @@
 #! /usr/bin/env python3
 import sys
 import os
-path = os.path.dirname(__file__)
-path_utils = os.path.join(path, "utils")
-sys.path.append(path_utils)
-from utils import Maze
-from utils import Character
+sys.path.append(os.path.join(os.path.dirname(__file__), "utils"))
+from utils import Maze, Character, Graphics
 
 def initialization():
     labyrinth = Maze.Labyrinth("Labyrinth.txt")
-    macgyver = Character.MacGyver(labyrinth)    
-    return labyrinth, macgyver
+    macgyver = Character.MacGyver(labyrinth)
+    game = Graphics.Game(800, 800, labyrinth, macgyver)
+    return game
 
 def main():
-    labyrinth, macgyver = initialization()
-    macgyver.interaction()
+    game = initialization()
+    Graphics.Game.game_loop(game)
     
 
 if __name__ == "__main__":

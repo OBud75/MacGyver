@@ -16,8 +16,8 @@ class Labyrinth(object):
         """
         #File needed with the drawing of the labyrinth
         self.file = file
-        width = 1
-        height = 1
+        width = 2
+        height = 2
         for ligne in self.file:
             height +=1
             for case in ligne:
@@ -34,8 +34,8 @@ class Labyrinth(object):
         self.passages = []
         self.start = []
         self.stop = []
-        for x in range (self.height+1):
-            for y in range (self.width+1):
+        for x in range (self.height):
+            for y in range (self.width):
                 if list_elmts[x][y] == "x":
                     wall = Structure.Blocks(x, y)
                     self.walls.append(wall)
@@ -54,8 +54,6 @@ class Labyrinth(object):
             {"Name": "Ether", "x": items_position[0].x, "y": items_position[0].y, "Image": "Images/ether.png"},
             {"Name": "Needle", "x": items_position[1].x, "y": items_position[1].y, "Image": "Images/aiguille.png"},
             {"Name": "Plastic tube",  "x": items_position[2].x, "y": items_position[2].y, "Image": "Images/tube_plastic.png"}]
-        #Will stop the game when MacGyver reach arriving point
-        self.game_over = False
         #Character in the labyrinth
         self.macgyver = Character.MacGyver(self)
     
@@ -89,9 +87,11 @@ class Labyrinth(object):
                 self.arriving_point()
 
     def arriving_point(self):
+        """Check if user got all the items
+        If yes he won, else he lost
+        """
         print ("Fighting guardian...")
         if len(self.items) == 0:
             print ("Using syringe...\nSeems to work!!\nYou won!!")
         else:
             print ("You lost...")
-        self.game_over = True
