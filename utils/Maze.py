@@ -3,12 +3,10 @@ import Structure
 import Character
 
 class Labyrinth(object):
-    def __init__(self):
-        """Initialisation of the labytinth
-        Args:
-            file (.txt): File where the labyrinth is drawn
-        """
-        self.file = "Labyrinth.txt"
+    game_over = False
+    def __init__(self, file):
+        #File needed with the drawing of the labyrinth
+        self.file = file
         width = 1
         height = 1
         for ligne in self.file:
@@ -43,19 +41,19 @@ class Labyrinth(object):
                 else:
                     arrive = Structure.Blocks(x, y)
                     list_stop.append(arrive)
-        #Creating items in random positions in passages
-        items_position = random.choices(list_passages, k=3)
-        items = {}
-        items["Ether"] = Structure.Blocks(items_position[0].x, items_position[0].y)
-        items["Needle"] = Structure.Blocks(items_position[1].x, items_position[1].y)
-        items["Plastic tube"] = Structure.Blocks(items_position[2].x, items_position[2].y)
         #Passing lists to class attributes
         self.walls = list_walls
         self.passages = list_passages
         self.start = list_start
         self.stop = list_stop
+        #Creating items in random positions in passages
+        items_position = random.choices(self.passages, k=3)
+        items = {}
+        items["Ether"] = Structure.Blocks(items_position[0].x, items_position[0].y)
+        items["Needle"] = Structure.Blocks(items_position[1].x, items_position[1].y)
+        items["Plastic tube"] = Structure.Blocks(items_position[2].x, items_position[2].y)
         self.items = items
-
+    
     def check_block(self, new_x, new_y):
         """Called when user is trying to move
         Args:
@@ -63,7 +61,6 @@ class Labyrinth(object):
             new_y (int): Column the user is trying to go
         Returns:
             Bool: Is the block free to go?
-            Calls end_game method if block is ending point
         """
         for wall in self.walls:
             if wall.x == new_x and wall.y == new_y:
@@ -71,12 +68,13 @@ class Labyrinth(object):
                 return False
         for key in self.items.keys():
             if self.items[key].x == new_x and self.items[key].y == new_y:
+                Character.MacGyver.finding_item(self, key)
                 del self.items[key]
-                Character.MacGyver.finding_item(Character.MacGyver(), key)
                 return True
         for passage in self.passages:
             if passage.x == new_x and passage.y == new_y:
                 print ("Free to go...")
+                print (self.items)
                 return True
         for starting_point in self.start:
             if starting_point.x == new_x and starting_point.y == new_y:
@@ -84,17 +82,25 @@ class Labyrinth(object):
                 return True
         for end_point in self.stop:
             if end_point.x == new_x and end_point.y == new_y:
-                self.end_game()
+                self.arriving_point()
 
-    def end_game(self):
-        """Called by check_block when block is end point
-           list_items empty when reaching it??
-           If yes then he won
-           If not then he lost
-           Quit the game
-        """
+    def arriving_point(self):
+        print ("Fighting guardian...")
         if len(self.items) == 0:
             print ("You won!!")
         else:
             print ("You did not find all the items...\nYou lost...")
-        Character.MacGyver().game_over = True
+        Labyrinth.game_over = True
+
+"""
+        self.items = [
+            {"Name": "Ether", "x": items_position[0].x, "y": items_position[0].y},
+            {"Name": "Needle", "x": items_position[1].x, "y": items_position[1].y},
+            {"Name": "Plastic tube",  "x": items_position[2].x, "y": items_position[2].y}]
+        
+        for item in self.items:
+            print (item)
+            if item["x"] == new_x and item["y"] == new_y:
+                self.finding_item(item)
+                return True
+"""
