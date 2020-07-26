@@ -57,11 +57,10 @@ class Labyrinth(object):
         self.stop = list_stop
         #Creating items in random positions in passages
         items_position = random.choices(self.passages, k=3)
-        items = {}
-        items["Ether"] = Structure.Blocks(items_position[0].x, items_position[0].y)
-        items["Needle"] = Structure.Blocks(items_position[1].x, items_position[1].y)
-        items["Plastic tube"] = Structure.Blocks(items_position[2].x, items_position[2].y)
-        self.items = items
+        self.items = [
+            {"Name": "Ether", "x": items_position[0].x, "y": items_position[0].y, "Image": "Images/ether.png"},
+            {"Name": "Needle", "x": items_position[1].x, "y": items_position[1].y, "Image": "Images/aiguille.png"},
+            {"Name": "Plastic tube",  "x": items_position[2].x, "y": items_position[2].y, "Image": "Images/tube_plastic.png"}]
         #Will stop the game when MacGyver reach arriving point
         self.game_over = False
         #Character in the labyrinth
@@ -79,15 +78,14 @@ class Labyrinth(object):
             if wall.x == new_x and wall.y == new_y:
                 print ("There is a wall")
                 return False
-        for key in self.items.keys():
-            if self.items[key].x == new_x and self.items[key].y == new_y:
-                Character.MacGyver.finding_item(self.macgyver, key)
-                del self.items[key]
+        for item in self.items:
+            if item["x"] == new_x and item["y"] == new_y:
+                Character.MacGyver.finding_item(self.macgyver, item)
+                self.items.remove(item)
                 return True
         for passage in self.passages:
             if passage.x == new_x and passage.y == new_y:
                 print ("Free to go...")
-                print (self.items)
                 return True
         for starting_point in self.start:
             if starting_point.x == new_x and starting_point.y == new_y:
@@ -104,16 +102,3 @@ class Labyrinth(object):
         else:
             print ("You did not find all the items...\nYou lost...")
         self.game_over = True
-
-"""
-        self.items = [
-            {"Name": "Ether", "x": items_position[0].x, "y": items_position[0].y},
-            {"Name": "Needle", "x": items_position[1].x, "y": items_position[1].y},
-            {"Name": "Plastic tube",  "x": items_position[2].x, "y": items_position[2].y}]
-        
-        for item in self.items:
-            print (item)
-            if item["x"] == new_x and item["y"] == new_y:
-                self.finding_item(item)
-                return True
-"""
