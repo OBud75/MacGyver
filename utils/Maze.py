@@ -3,7 +3,6 @@ import Structure
 import Character
 
 class Labyrinth(object):
-    game_over = False
     def __init__(self, file):
         #File needed with the drawing of the labyrinth
         self.file = file
@@ -41,7 +40,7 @@ class Labyrinth(object):
                 else:
                     arrive = Structure.Blocks(x, y)
                     list_stop.append(arrive)
-        #Passing lists to class attributes
+        #Passing lists to instance attributes
         self.walls = list_walls
         self.passages = list_passages
         self.start = list_start
@@ -53,6 +52,9 @@ class Labyrinth(object):
         items["Needle"] = Structure.Blocks(items_position[1].x, items_position[1].y)
         items["Plastic tube"] = Structure.Blocks(items_position[2].x, items_position[2].y)
         self.items = items
+        #Will stop the game when MacGyver reach arriving point
+        self.macgyver = Character.MacGyver(self.start[0].x, self.start[0].y, self)
+        self.game_over = False
     
     def check_block(self, new_x, new_y):
         """Called when user is trying to move
@@ -68,7 +70,7 @@ class Labyrinth(object):
                 return False
         for key in self.items.keys():
             if self.items[key].x == new_x and self.items[key].y == new_y:
-                Character.MacGyver.finding_item(self, key)
+                Character.MacGyver.finding_item(self.macgyver, key)
                 del self.items[key]
                 return True
         for passage in self.passages:
@@ -90,7 +92,7 @@ class Labyrinth(object):
             print ("You won!!")
         else:
             print ("You did not find all the items...\nYou lost...")
-        Labyrinth.game_over = True
+        self.game_over = True
 
 """
         self.items = [
