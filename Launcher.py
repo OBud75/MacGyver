@@ -7,7 +7,7 @@ from utils import Maze, Character, Graphics
 def initialization():
     labyrinth = Maze.Labyrinth("Labyrinth.txt")
     macgyver = Character.MacGyver(labyrinth)
-    game = Graphics.Game(800, 800, labyrinth, macgyver)
+    game = Graphics.Game(750, 750, labyrinth, macgyver)
     return game
 
 def main():

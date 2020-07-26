@@ -18,8 +18,8 @@ class Game(object):
         pygame.time.delay(self.refreshtime)
 
     def visual(self, image, x_block, y_block):
-        self.x = round(x_block * self.width_pixels / self.labyrinth.width + 5)
-        self.y = round(y_block * self.height_pixels / self.labyrinth.height + 5) 
+        self.x = round(x_block * self.height_pixels / self.labyrinth.height + self.height_pixels/200)
+        self.y = round(y_block * self.width_pixels / self.labyrinth.width + self.width_pixels/200) 
         self.window.blit(pygame.image.load(image), (self.y, self.x))
 
     def game_loop(self):
