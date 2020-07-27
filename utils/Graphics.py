@@ -14,17 +14,15 @@ class Game(object):
         self.labyrinth = labyrinth
         self.macgyver = macgyver
         #Width and height of the window
-        self.width_pixels = self.labyrinth.width * 43
-        self.height_pixels = self.labyrinth.height * 43
+        self.block_size = 43
+        self.width_pixels = self.block_to_pixels(self.labyrinth.width)
+        self.height_pixels = self.block_to_pixels(self.labyrinth.height)
         self.window = pygame.display.set_mode((self.width_pixels, self.height_pixels))
         #Window settings
-        self.name = "MacGyver"
-        pygame.display.set_caption(self.name)
-        self.icon = os.path.join(Game.path_images, "MacGyver.png")
-        pygame.display.set_icon(pygame.image.load(self.icon))
-        self.refreshtime = 100
-        pygame.time.delay(self.refreshtime)
-        
+        pygame.display.set_caption("MacGyver")
+        pygame.display.set_icon(pygame.image.load(os.path.join(Game.path_images, "MacGyver.png")))
+        pygame.time.delay(100)
+
     def block_to_pixels(self, block):
         """Convert blocks to pixels
 
@@ -34,7 +32,7 @@ class Game(object):
         Returns:
             int: Value in pixels
         """
-        return round(block * 43)
+        return round(block * self.block_size)
 
     def visual(self, image, x_block, y_block):
         """Method used to create visuals
@@ -79,10 +77,9 @@ class Game(object):
             #Items display
             for item in self.labyrinth.items:
                 self.visual(os.path.join(Game.path_images, item["Image"]), item["x"], item["y"])
+            self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", 1, 0, 0.75)
             #MacGyver Display
             self.visual(os.path.join(Game.path_images, "MacGyver.png"), self.macgyver.x, self.macgyver.y)
-            #Items display
-            self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", 1, 0, 0.75)
             #Event handler
             for self.event in pygame.event.get():
                 if self.event.type == pygame.QUIT:
