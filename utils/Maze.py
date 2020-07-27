@@ -3,7 +3,7 @@ import Structure
 import Character
 import Graphics
 
-class Labyrinth(object):
+class Labyrinth:
     def __init__(self, file):
         """Create the structure of the labyrinth
         'o' for passages
