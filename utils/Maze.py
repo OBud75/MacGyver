@@ -17,12 +17,15 @@ class Labyrinth:
         """
         self.file = file
         self.height = 0
+        max_width = 0
         list_elmts = []
         with open(self.file, 'r') as lab:
             for line in lab.readlines():
                 list_elmts.append(line)
                 self.height += 1
-                self.width = len(line)
+                if len(line) > max_width:
+                    max_width = len(line)
+                    self.width = max_width
         #Check element and create appropriated structure
         self.walls = []
         self.passages = []

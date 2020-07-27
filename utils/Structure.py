@@ -9,6 +9,3 @@ class Blocks:
         """
         self.x = x
         self.y = y
-    
-    def __repr__(self):
-        return f"{self.x+1};{self.y+1}"
