@@ -6,17 +6,18 @@ import Graphics
 class Labyrinth:
     def __init__(self, file):
         """Create the structure of the labyrinth
+        Blocks are instances of the Blocks class in the Structure Module
         'o' for passages
         'x' for walls
         'D' for departure
         'A' for arrive
-        Items will be create randomly in passages positions
+        Items are created randomly in passages positions
 
         Args:
             file (.txt): File with the draw of the labyrinth
         """
         self.file = file
-        #Creating width, height and a list of all elements reading the file
+        #Define width, height and a list of all elements reading the file
         self.height = 0
         list_elmts = []
         with open(self.file, 'r') as lab:
@@ -24,7 +25,7 @@ class Labyrinth:
                 list_elmts.append(line)
                 self.height += 1
                 self.width = len(line)
-        #Check element and create appropriated structure
+        #Check every element and create appropriated structure
         self.walls = []
         self.passages = []
         self.start = []
@@ -56,12 +57,15 @@ class Labyrinth:
         self.game_over = False
     
     def check_block(self, new_x, new_y):
-        """Called when user is trying to move
+        """Called when the user is trying to move
+        Loop over each kind of structure to know what's in the new block
+
         Args:
-            new_x (int): Row the user is trying to go
-            new_y (int): Column the user is trying to go
+            new_x (int): Row the user is trying to reach
+            new_y (int): Column the user is trying to reach
+
         Returns:
-            Bool: Is the block free to go?
+            Boolean: Is the block free to go??
         """
         for wall in self.walls:
             if wall.x == new_x and wall.y == new_y:

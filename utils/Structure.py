@@ -1,7 +1,7 @@
 class Blocks:
     def __init__(self, x, y):
-        """Create each blocks of the labyrinth:
-        walls, passages, starting point and arriving point
+        """Create each blocks of the labyrinth
+        Walls, passages, starting point and arriving point
 
         Args:
             x (int): Row
