@@ -82,7 +82,8 @@ class Game:
             #Items display
             for item in self.labyrinth.items:
                 self.visual(os.path.join(self.path_images, item["Image"]), item["x"], item["y"])
-            self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", 2, 0, 0.75)
+            if self.labyrinth.macgyver.items_found:
+                self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", 2, 0, 0.75)
             #MacGyver Display
             self.visual(os.path.join(self.path_images, "MacGyver.png"), self.macgyver.x, self.macgyver.y)
             #Event handler
