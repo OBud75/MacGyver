@@ -16,16 +16,14 @@ class Labyrinth:
             file (.txt): File with the draw of the labyrinth
         """
         self.file = file
+        #Creating width, height and a list of all elements reading the file
         self.height = 0
-        max_width = 0
         list_elmts = []
         with open(self.file, 'r') as lab:
             for line in lab.readlines():
                 list_elmts.append(line)
                 self.height += 1
-                if len(line) > max_width:
-                    max_width = len(line)
-                    self.width = max_width
+                self.width = len(line)
         #Check element and create appropriated structure
         self.walls = []
         self.passages = []
@@ -54,7 +52,7 @@ class Labyrinth:
         #Character and display in the labyrinth
         self.macgyver = Character.MacGyver(self)
         self.game = Graphics.Game(self, self.macgyver)
-        #Stop the loop
+        #Will become True when arriving point is reached
         self.game_over = False
     
     def check_block(self, new_x, new_y):
