@@ -18,14 +18,12 @@ class Labyrinth(object):
         """
         #File needed with the drawing of the labyrinth
         self.file = file
-        width = 2
-        height = 2
-        for ligne in self.file:
-            height +=1
-            for case in ligne:
-                width +=1
-        self.width = width
-        self.height = height
+        self.width = 2
+        self.height = 2
+        for line in self.file:
+            self.height +=1
+            for block in line:
+                self.width +=1
         #Creating the structure of the labyrinth
         list_elmts = []
         with open(self.file, 'r') as lab:

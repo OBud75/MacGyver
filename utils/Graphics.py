@@ -14,8 +14,8 @@ class Game(object):
         self.labyrinth = labyrinth
         self.macgyver = macgyver
         #Width and height of the window
-        self.width_pixels = 650
-        self.height_pixels = 650
+        self.width_pixels = self.labyrinth.width * 43
+        self.height_pixels = self.labyrinth.height * 43
         self.window = pygame.display.set_mode((self.width_pixels, self.height_pixels))
         #Window settings
         self.name = "MacGyver"
@@ -26,15 +26,15 @@ class Game(object):
         pygame.time.delay(self.refreshtime)
         
     def block_to_pixels(self, block):
-        """Method used to convert blocks to pixels
+        """Convert blocks to pixels
 
         Args:
-            block (int): size or position in blocks
+            block (int): Value in blocks
 
         Returns:
-            int: size or position in pixels
+            int: Value in pixels
         """
-        return round(block * self.height_pixels / self.labyrinth.height)
+        return round(block * 43)
 
     def visual(self, image, x_block, y_block):
         """Method used to create visuals
