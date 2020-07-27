@@ -2,7 +2,6 @@ import random
 import Structure
 import Character
 import Graphics
-import pygame
 
 class Labyrinth(object):
     def __init__(self, file):
@@ -16,19 +15,14 @@ class Labyrinth(object):
         Args:
             file (.txt): File with the draw of the labyrinth
         """
-        #File needed with the drawing of the labyrinth
         self.file = file
-        self.width = 2
-        self.height = 2
-        for line in self.file:
-            self.height +=1
-            for block in line:
-                self.width +=1
-        #Creating the structure of the labyrinth
+        self.height = 0
         list_elmts = []
         with open(self.file, 'r') as lab:
             for line in lab.readlines():
                 list_elmts.append(line)
+                self.height += 1
+                self.width = len(line)
         #Check element and create appropriated structure
         self.walls = []
         self.passages = []
