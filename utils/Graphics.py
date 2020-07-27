@@ -11,20 +11,20 @@ class Game(object):
             labyrinth (object): Labyrinth in which MacGyver is trapped
             macgyver (object): Main character trapped in the labyrinth
         """
+        self.labyrinth = labyrinth
+        self.macgyver = macgyver
         #Width and height of the window
         self.width_pixels = 650
         self.height_pixels = 650
+        self.window = pygame.display.set_mode((self.width_pixels, self.height_pixels))
         #Window settings
         self.name = "MacGyver"
-        self.icon = os.path.join(Game.path_images, "MacGyver.png")
-        self.window = pygame.display.set_mode((self.width_pixels, self.height_pixels))
-        self.refreshtime = 100
-        self.labyrinth = labyrinth
-        self.macgyver = macgyver
         pygame.display.set_caption(self.name)
+        self.icon = os.path.join(Game.path_images, "MacGyver.png")
         pygame.display.set_icon(pygame.image.load(self.icon))
+        self.refreshtime = 100
         pygame.time.delay(self.refreshtime)
-
+        
     def block_to_pixels(self, block):
         """Method used to convert blocks to pixels
 
@@ -41,23 +41,23 @@ class Game(object):
 
         Args:
             image (.png): Path to image
-            x_block (int): position x of the visual in blocks
-            y_block (int): position y of the visual in blocks
+            x_block (int): position of the visual in blocks (raw)
+            y_block (int): position of the visual in blocks (column)
         """
         x_pixels = self.block_to_pixels(x_block) 
         y_pixels = self.block_to_pixels(y_block)
         self.window.blit(pygame.image.load(image), (y_pixels, x_pixels))
 
-    def show_text(self, text, x, y, taille):
+    def show_text(self, text, x, y, size):
         """Method used to show text on the screen
 
         Args:
             text (str): Text to print
-            x (int): Position of the text (x) in blocks
-            y (int): Position of the text (y) in blocks
-            taille (int): Size of the text in blocks
+            x (int): Position of the text (vertical align) in blocks
+            y (int): Position of the text (horizontal align) in blocks
+            size (int): Size of the text in blocks
         """
-        font = pygame.font.Font("freesansbold.ttf", self.block_to_pixels(taille))
+        font = pygame.font.Font("freesansbold.ttf", self.block_to_pixels(size))
         self.text = font.render(text, True, (255, 255, 255))
         self.window.blit(self.text, (self.block_to_pixels(x), self.block_to_pixels(y)))
 
@@ -91,3 +91,4 @@ class Game(object):
                     Character.MacGyver.interaction(self)
             #Update screen
             pygame.display.flip()
+        pygame.quit()

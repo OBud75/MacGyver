@@ -40,9 +40,7 @@ class MacGyver(object):
         Args:
             item (object): Item found
         """
-        self.game.show_text(f"You've found item: {item['Name']}", 1, 1, 1)
         self.items_found.append(item['Name'])
         if len(self.items_found) == 3:
-            self.game.show_text("Compiling items...\nSyringe created!!", 5, 5, 1.5)
             syringe = {"Name": "Syringe", "Image": "Images/seringue.png"}
             self.items_found = syringe["Name"]

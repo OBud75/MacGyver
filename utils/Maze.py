@@ -92,10 +92,8 @@ class Labyrinth(object):
         """Check if user got all the items
         If yes he won, else he lost
         """
-        self.game.show_text("Fighting guardian...", 1, 2, 1)
-        pygame.time.wait(1000)
         if len(self.items) == 0:
-            print ("Using syringe...\nSeems to work!!\nYou won!!")
+            self.game.show_text("You won!!", 3, 4, 2)
         else:
-            print ("You lost...")
+            self.game.show_text("You lost...", 3, 4, 2)
         self.game_over = True
