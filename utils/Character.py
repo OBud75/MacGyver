@@ -2,7 +2,7 @@ import Maze
 import pygame
 import Graphics
 
-class MacGyver(object):
+class MacGyver:
     def __init__(self, labyrinth):
         """Create the main character
         Args:

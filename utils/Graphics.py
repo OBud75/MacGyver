@@ -2,15 +2,9 @@ import os
 import pygame
 import Character
 
-class Game(object):
+class Game:
     path_images = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Images")
     def __init__(self, labyrinth, macgyver):
-        """Initialization of the game
-
-        Args:
-            labyrinth (object): Labyrinth in which MacGyver is trapped
-            macgyver (object): Main character trapped in the labyrinth
-        """
         self.labyrinth = labyrinth
         self.macgyver = macgyver
         #Width and height of the window
@@ -77,7 +71,7 @@ class Game(object):
             #Items display
             for item in self.labyrinth.items:
                 self.visual(os.path.join(Game.path_images, item["Image"]), item["x"], item["y"])
-            self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", 1, 0, 0.75)
+            self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", 2, 0, 0.75)
             #MacGyver Display
             self.visual(os.path.join(Game.path_images, "MacGyver.png"), self.macgyver.x, self.macgyver.y)
             #Event handler
