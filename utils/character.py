@@ -1,6 +1,6 @@
+import pygame
 from utils import maze
 from utils import graphics
-import pygame
 
 class MacGyver:
     def __init__(self, labyrinth):

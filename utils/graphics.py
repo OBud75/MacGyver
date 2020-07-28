@@ -1,5 +1,7 @@
 import os
+
 import pygame
+
 from utils import character
 
 class Game:

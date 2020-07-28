@@ -1,5 +1,8 @@
 import random
-from utils import structure, character, graphics
+
+from utils import structure
+from utils import character
+from utils import graphics
 
 class Labyrinth:
     def __init__(self, file):

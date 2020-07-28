@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+
 from utils import maze
 from utils import character
 from utils import graphics
