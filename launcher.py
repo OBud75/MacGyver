@@ -9,7 +9,7 @@ def initializations():
     Returns:
         Game instance: We'll launch the program with the method game_loop
     """
-    labyrinth = maze.Labyrinth("Labyrinth.txt")
+    labyrinth = maze.Labyrinth("labyrinth.txt")
     macgyver = character.MacGyver(labyrinth)
     game = graphics.Game(labyrinth, macgyver)
     return game
