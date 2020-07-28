@@ -1,7 +1,5 @@
 import random
-import Structure
-import Character
-import Graphics
+from utils import structure, character, graphics
 
 class Labyrinth:
     def __init__(self, file):
@@ -33,16 +31,16 @@ class Labyrinth:
         for x in range (self.height):
             for y in range (self.width):
                 if list_elmts[x][y] == "x":
-                    wall = Structure.Blocks(x, y)
+                    wall = structure.Blocks(x, y)
                     self.walls.append(wall)
                 elif list_elmts[x][y] == "o":
-                    passage = Structure.Blocks(x, y)
+                    passage = structure.Blocks(x, y)
                     self.passages.append(passage)
                 elif list_elmts[x][y] == "D":
-                    starting_point = Structure.Blocks(x, y)
+                    starting_point = structure.Blocks(x, y)
                     self.start.append(starting_point)
                 else:
-                    arrive = Structure.Blocks(x, y)
+                    arrive = structure.Blocks(x, y)
                     self.stop.append(arrive)
         #Creating items in random positions in passages
         items_position = random.choices(self.passages, k=3)
@@ -51,8 +49,8 @@ class Labyrinth:
             {"Name": "Needle", "x": items_position[1].x, "y": items_position[1].y, "Image": "aiguille.png"},
             {"Name": "Plastic tube",  "x": items_position[2].x, "y": items_position[2].y, "Image": "tube_plastique.png"}]
         #Character and display in the labyrinth
-        self.macgyver = Character.MacGyver(self)
-        self.game = Graphics.Game(self, self.macgyver)
+        self.macgyver = character.MacGyver(self)
+        self.game = graphics.Game(self, self.macgyver)
         #Will become True when arriving point is reached
         self.game_over = False
     
@@ -72,7 +70,7 @@ class Labyrinth:
                 return False
         for item in self.items:
             if item["x"] == new_x and item["y"] == new_y:
-                Character.MacGyver.finding_item(self.macgyver, item)
+                character.MacGyver.finding_item(self.macgyver, item)
                 self.items.remove(item)
                 return True
         for passage in self.passages:
@@ -90,7 +88,7 @@ class Labyrinth:
         If yes he won, else he lost
         """
         if len(self.items) == 0:
-            self.game.show_text("You won!!", 3, 4, 2)
+            self.game.show_text("You won!!")
         else:
-            self.game.show_text("You lost...", 3, 4, 2)
+            self.game.show_text("You lost...")
         self.game_over = True

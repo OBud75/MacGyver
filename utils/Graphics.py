@@ -1,6 +1,6 @@
 import os
 import pygame
-import Character
+from utils import character
 
 class Game:
     def __init__(self, labyrinth, macgyver):
@@ -48,7 +48,7 @@ class Game:
         y_pixels = self.block_to_pixels(y_block)
         self.window.blit(pygame.image.load(image), (y_pixels, x_pixels))
 
-    def show_text(self, text, x, y, size):
+    def show_text(self, text, x = 3, y = 4, size = 2):
         """Method used to show text on the screen
 
         Args:
@@ -83,7 +83,7 @@ class Game:
             for item in self.labyrinth.items:
                 self.visual(os.path.join(self.path_images, item["Image"]), item["x"], item["y"])
             if self.labyrinth.macgyver.items_found:
-                self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", 2, 0, 0.75)
+                self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", x=2, y=0, size=0.75)
             #MacGyver Display
             self.visual(os.path.join(self.path_images, "MacGyver.png"), self.macgyver.x, self.macgyver.y)
             #Event handler
@@ -91,7 +91,7 @@ class Game:
                 if self.event.type == pygame.QUIT:
                     self.labyrinth.game_over = True
                 elif self.event.type == pygame.KEYDOWN:
-                    Character.MacGyver.interaction(self)
+                    character.MacGyver.interaction(self)
             #Update screen
             pygame.display.flip()
         pygame.quit()

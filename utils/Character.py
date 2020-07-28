@@ -1,6 +1,6 @@
-import Maze
+from utils import maze
+from utils import graphics
 import pygame
-import Graphics
 
 class MacGyver:
     def __init__(self, labyrinth):
@@ -12,13 +12,14 @@ class MacGyver:
         self.x = self.labyrinth.start[0].x
         self.y = self.labyrinth.start[0].y
         self.items_found = []
-        self.game = Graphics.Game(self.labyrinth, self)
+        self.game = graphics.Game(self.labyrinth, self)
 
     def interaction(self):
         """Trying to move, provisory block is new_x and new_y
         Call check_block to know if provisory block is available
         Then update self.x and self.y dipeding on the result
         """
+        #Getting new_x and new_y in dipend of user's input
         if self.event.key == pygame.K_UP:
             new_x, new_y = self.macgyver.x-1, self.macgyver.y
         elif self.event.key == pygame.K_DOWN:
@@ -30,7 +31,7 @@ class MacGyver:
         else:
             new_x, new_y = self.macgyver.x, self.macgyver.y
         #Calling check_block
-        if Maze.Labyrinth.check_block(self.labyrinth, new_x, new_y):
+        if maze.Labyrinth.check_block(self.labyrinth, new_x, new_y):
             self.macgyver.x, self.macgyver.y = new_x, new_y
     
     def finding_item(self, item):
@@ -42,5 +43,4 @@ class MacGyver:
         """
         self.items_found.append(item['Name'])
         if len(self.items_found) == 3:
-            syringe = {"Name": "Syringe", "Image": "Images/seringue.png"}
-            self.items_found = syringe["Name"]
+            self.items_found = "syringe"
