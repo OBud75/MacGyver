@@ -10,6 +10,7 @@ We update MacGyver's x and y if the provisionary position is a passage, the star
 If the new block contains an item, we update MacGyver's "items_found" list
 If all items are found, we update MacGyver's "items_found" list to the syringe
 """
+
 # Third party imports
 import pygame
 
