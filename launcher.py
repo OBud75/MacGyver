@@ -1,9 +1,10 @@
 #! /usr/bin/env python3
 
-"""In this file, we launch the program creating instances
+"""This file is used to launch the program
+We first initialize all the instances of our classes
 The labyrinth is an instance of our class "Labyrinth" and takes the .txt file as an argument
 The main character is an instance of the class "MacGyver" and takes the labyrinth as an argument
-Finally, the game in itself is an instance of the class "Game"
+Finally, the window of the game is an instance of the class "Game"
 It takes both labyrinth and macgyver as arguments
 The program is launched by the game_loop method of the class "Game"
 """
