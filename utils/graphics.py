@@ -5,14 +5,15 @@ We need to decide how many pixels a block is going to take based on the size of 
 These images are stored in the "Images" directory in the main directory
 To convert blocks into pixels, we will use the "block_to_pixels" method
 We can change some window settings using "pygame" modules
-In this case, we give the window a name, an icon, and the window refreshes
+In this case, we give the window a name and an icon
 We now can start displaying the window with the "game_loop" method
 Until "game_over" (see "maze" module) is False, the loop will continue
 To display things on the window we use the pygame's "blit" method
 We first want to create visuals for each block and item
 We do this using the "visual" method that takes the image and the position (x and y) as arguments
 Then we show text on the screen using the "show_text" method
-We'll give this method the size and the position (x, y) of the text as arguments
+We'll give this method the size, the position (x, y) of the text and a delay as arguments
+By default, the text will be display at the center of the screen with no delay
 Pygame's "event.get()" method allows us to handle the user's inputs
 If the user presses a keyboard arrow, it will call the "interaction" method of the "character" module
 """
@@ -48,7 +49,6 @@ class Game:
         self.window = pygame.display.set_mode((self.width_pixels, self.height_pixels))
         pygame.display.set_caption("MacGyver")
         pygame.display.set_icon(pygame.image.load(os.path.join(self.path_images, "MacGyver.png")))
-        pygame.time.delay(100)
 
     def block_to_pixels(self, block):
         """Convert blocks to pixels
@@ -73,7 +73,7 @@ class Game:
         y_pixels = self.block_to_pixels(y_block)
         self.window.blit(pygame.image.load(image), (y_pixels, x_pixels))
 
-    def show_text(self, text, x = 3, y = 4, size = 2):
+    def show_text(self, text, x = 3, y = 4, size = 0.75, delay = 0):
         """Method used to show text on the screen
 
         Args:
@@ -81,10 +81,13 @@ class Game:
             x (int): Position of the text (vertical align) in blocks
             y (int): Position of the text (horizontal align) in blocks
             size (int): Size of the text in blocks
+            delay (int): Delay time while showing the text in miliseconds
         """
         font = pygame.font.Font("freesansbold.ttf", self.block_to_pixels(size))
         self.text = font.render(text, True, (255, 255, 255))
         self.window.blit(self.text, (self.block_to_pixels(x), self.block_to_pixels(y)))
+        pygame.display.flip()
+        pygame.time.delay(delay)
 
     def game_loop(self):
         """Main game loop
@@ -111,9 +114,11 @@ class Game:
             for item in self.labyrinth.items:
                 self.visual(os.path.join(self.path_images, item["Image"]), item["x"], item["y"])
             if self.labyrinth.macgyver.items_found:
-                self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", x=2, y=0, size=0.75)
+                self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", x = 2, y = 0.2)
+            if self.labyrinth.macgyver.items_found == "syringe":
+                self.visual(os.path.join(self.path_images, "seringue.png"), self.macgyver.x-1, self.macgyver.y)
 
-            #Visual of MacGyver
+            # Visual of MacGyver
             self.visual(os.path.join(self.path_images, "MacGyver.png"), self.macgyver.x, self.macgyver.y)
 
             # Event handler

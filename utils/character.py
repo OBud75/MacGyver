@@ -1,5 +1,5 @@
 """Here we create the main character of our labyrinth
-The first attribute is the labyrinth he's in
+The first attributes are the labyrinth he's in and the window he's displayed in
 MacGyver has a position (x, y) corresponding to the row and column that he's in
 This position is initialized at the starting point
 Another attribute is the list of items he found
@@ -10,7 +10,7 @@ We update MacGyver's x and y if the provisionary position is a passage, the star
 If the new block contains an item, we update MacGyver's "items_found" list
 If all items are found, we update MacGyver's "items_found" list to the syringe
 """
-
+import time
 # Third party imports
 import pygame
 
@@ -25,6 +25,7 @@ class MacGyver:
             labyrinth (object): Labyrinth MacGyver is trapped in
         """
         self.labyrinth = labyrinth
+        self.game = graphics.Game(self.labyrinth, self)
         self.x = self.labyrinth.start[0].x
         self.y = self.labyrinth.start[0].y
         self.items_found = []
@@ -57,6 +58,9 @@ class MacGyver:
         Args:
             item (object): Item found
         """
+        self.game.show_text(f"You found: {item['Name']}!!", delay = 1000)
         self.items_found.append(item['Name'])
         if len(self.items_found) == 3:
+            self.game.show_text("You found all the items...", y= 5, delay = 1000)
+            self.game.show_text("You have created a syringe!!", y = 6, delay = 2000)
             self.items_found = "syringe"
