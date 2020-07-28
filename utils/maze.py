@@ -1,5 +1,25 @@
+"""Here we create the labyrinth object
+We start defining the height and width by reading the .txt file we gave as argument
+Continuing to read the file, we create a list of elements
+We can now create instance attributes for every kind of element in the list
+We have walls, passages, and a starting and arriving point
+These objects are created with the "Blocks" class in the structure module
+All of these objects have a position defined by their x and y
+That correspond to the row and the column they're in
+Once this step is completed, the items can be created
+We need 3 items in random positions (they have to be in one of the passages)
+These items have a name, position (x and y), and an image associated with them
+We can know what's in each block using the "ckeck_block" method
+This method takes the position (x and y) of the block we want to check
+If the block is the arriving point, it will call the "arriving_point" method
+If all items have been taken, the user won, else he lost
+Then this method will set "game_over" to True in order to exit the game
+"""
+
+# Standard library imports
 import random
 
+# Local application imports
 from utils import structure
 from utils import character
 from utils import graphics
@@ -7,18 +27,18 @@ from utils import graphics
 class Labyrinth:
     def __init__(self, file):
         """Create the structure of the labyrinth
-        Blocks are instances of the Blocks class in the Structure Module
+        Blocks are instances of the "Blocks" class in the "Structure" module
         'o' for passages
         'x' for walls
         'D' for departure
         'A' for arrive
-        Items are created randomly in passages positions
+        Items are created randomly in passage positions
 
         Args:
             file (.txt): File with the draw of the labyrinth
         """
+        # Define width, height and a list of all elements reading the file
         self.file = file
-        #Define width, height and a list of all elements reading the file
         self.height = 0
         list_elmts = []
         with open(self.file, 'r') as lab:
@@ -26,7 +46,8 @@ class Labyrinth:
                 list_elmts.append(line)
                 self.height += 1
                 self.width = len(line)
-        #Check every element and create appropriated structure
+
+        # Check every element and create appropriated structure
         self.walls = []
         self.passages = []
         self.start = []
@@ -42,19 +63,22 @@ class Labyrinth:
                 elif list_elmts[x][y] == "D":
                     starting_point = structure.Blocks(x, y)
                     self.start.append(starting_point)
-                else:
+                elif list_elmts[x][y] == "A":
                     arrive = structure.Blocks(x, y)
                     self.stop.append(arrive)
-        #Creating items in random positions in passages
+
+        # Creating items in random positions in passages
         items_position = random.choices(self.passages, k=3)
         self.items = [
             {"Name": "Ether", "x": items_position[0].x, "y": items_position[0].y, "Image": "ether.png"},
             {"Name": "Needle", "x": items_position[1].x, "y": items_position[1].y, "Image": "aiguille.png"},
             {"Name": "Plastic tube",  "x": items_position[2].x, "y": items_position[2].y, "Image": "tube_plastique.png"}]
-        #Character and display in the labyrinth
+
+        # Character and display in the labyrinth
         self.macgyver = character.MacGyver(self)
         self.game = graphics.Game(self, self.macgyver)
-        #Will become True when arriving point is reached
+
+        # Will become True when arriving point is reached
         self.game_over = False
     
     def check_block(self, new_x, new_y):

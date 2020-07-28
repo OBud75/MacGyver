@@ -1,13 +1,35 @@
+"""Here we create the game window using the "pygame" package
+The first 2 arguments are the labyrinth we want to display and Macgyver
+Then we have the size of the window (height and width)
+We need to decide how many pixels a block is going to take based on the size of the images
+These images are stored in the "Images" directory in the main directory
+To convert blocks into pixels, we will use the "block_to_pixels" method
+We can change some window settings using "pygame" modules
+In this case, we give the window a name, an icon, and the window refreshes
+We now can start displaying the window with the "game_loop" method
+Until "game_over" (see "maze" module) is False, the loop will continue
+To display things on the window we use the pygame's "blit" method
+We first want to create visuals for each block and item
+We do this using the "visual" method that takes the image and the position (x and y) as arguments
+Then we show text on the screen using the "show_text" method
+We'll give this method the size and the position (x, y) of the text as arguments
+Pygame's "event.get()" method allows us to handle the user's inputs
+If the user presses a keyboard arrow, it will call the "interaction" method of the "character" module
+"""
+
+# Standard library imports
 import os
 
+# Third party imports
 import pygame
 
+# Local application imports
 from utils import character
 
 class Game:
     def __init__(self, labyrinth, macgyver):
         """Initialize the game object with window properties
-        Converting blocks logic in pixels with block_to_pixels method
+        Converting blocks logic into pixels with "block_to_pixels" method
 
         Args:
             labyrinth (object): Structure of the labyrinth
@@ -15,13 +37,14 @@ class Game:
         """
         self.labyrinth = labyrinth
         self.macgyver = macgyver
-        #Images directory
-        self.path_images = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Images")
-        #Width and height of the window
+
+        # Width and height of the window
         self.block_size = 43
         self.width_pixels = self.block_to_pixels(self.labyrinth.width)
         self.height_pixels = self.block_to_pixels(self.labyrinth.height)
-        #Window settings
+
+        # Window settings
+        self.path_images = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Images")
         self.window = pygame.display.set_mode((self.width_pixels, self.height_pixels))
         pygame.display.set_caption("MacGyver")
         pygame.display.set_icon(pygame.image.load(os.path.join(self.path_images, "MacGyver.png")))
@@ -43,8 +66,8 @@ class Game:
 
         Args:
             image (.png): Path to image
-            x_block (int): position of the visual in blocks (raw)
-            y_block (int): position of the visual in blocks (column)
+            x_block (int): Position of the visual in blocks (raw)
+            y_block (int): Position of the visual in blocks (column)
         """
         x_pixels = self.block_to_pixels(x_block) 
         y_pixels = self.block_to_pixels(y_block)
@@ -66,12 +89,14 @@ class Game:
     def game_loop(self):
         """Main game loop
         Loading visuals for each block, character, items and items found
-        User moves using the keyboard arrows
-        It will call the method interaction in the MacGyver class
+        Then we get the events happening (quit or keydown)
+        User tries to move using the keyboard arrows (keydown)
+        This calls the method "interaction" of the "MacGyver" class
         """
         pygame.init()
         while self.labyrinth.game_over == False:
-            #Structure of the labyrinth display
+
+            # Visuals of the structure of the labyrinth
             for wall in self.labyrinth.walls:
                 self.visual(os.path.join(self.path_images, "wall.png"), wall.x, wall.y)
             for passage in self.labyrinth.passages:
@@ -81,19 +106,23 @@ class Game:
             for stop in self.labyrinth.stop:
                 self.visual(os.path.join(self.path_images, "start_stop.png"), stop.x, stop.y)
                 self.visual(os.path.join(self.path_images, "Gardien.png"), stop.x, stop.y)
-            #Items display
+
+            # Visuals of the items
             for item in self.labyrinth.items:
                 self.visual(os.path.join(self.path_images, item["Image"]), item["x"], item["y"])
             if self.labyrinth.macgyver.items_found:
                 self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", x=2, y=0, size=0.75)
-            #MacGyver Display
+
+            #Visual of MacGyver
             self.visual(os.path.join(self.path_images, "MacGyver.png"), self.macgyver.x, self.macgyver.y)
-            #Event handler
+
+            # Event handler
             for self.event in pygame.event.get():
                 if self.event.type == pygame.QUIT:
                     self.labyrinth.game_over = True
                 elif self.event.type == pygame.KEYDOWN:
                     character.MacGyver.interaction(self)
-            #Update screen
+
+            # Update screen
             pygame.display.flip()
         pygame.quit()

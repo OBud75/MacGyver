@@ -1,3 +1,6 @@
+"""We use this class to create the structure of the labyrinth
+"""
+
 class Blocks:
     def __init__(self, x, y):
         """Create each blocks of the labyrinth
