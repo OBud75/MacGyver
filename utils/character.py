@@ -58,9 +58,9 @@ class MacGyver:
         Args:
             item (object): Item found
         """
-        self.game.show_text(f"You found: {item['Name']}!!", delay = 1000)
+        self.game.show_text(f"You found: {item['Name']}!!", delay=1000)
         self.items_found.append(item['Name'])
         if len(self.items_found) == 3:
-            self.game.show_text("You found all the items...", y= 5, delay = 1000)
-            self.game.show_text("You have created a syringe!!", y = 6, delay = 2000)
+            self.game.show_text("You found all the items...", x=3.5 , y=5, delay=2000)
+            self.game.show_text("You have created a syringe!!", x=3, y=6, delay=1000)
             self.items_found = "syringe"

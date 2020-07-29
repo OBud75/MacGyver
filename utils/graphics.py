@@ -73,7 +73,7 @@ class Game:
         y_pixels = self.block_to_pixels(y_block)
         self.window.blit(pygame.image.load(image), (y_pixels, x_pixels))
 
-    def show_text(self, text, x = 3, y = 4, size = 0.75, delay = 0):
+    def show_text(self, text, x=4, y=4, size=0.75, delay=0, R=255, G=255, B=255):
         """Method used to show text on the screen
 
         Args:
@@ -84,7 +84,7 @@ class Game:
             delay (int): Delay time while showing the text in miliseconds
         """
         font = pygame.font.Font("freesansbold.ttf", self.block_to_pixels(size))
-        self.text = font.render(text, True, (255, 255, 255))
+        self.text = font.render(text, True, (R, G, B))
         self.window.blit(self.text, (self.block_to_pixels(x), self.block_to_pixels(y)))
         pygame.display.flip()
         pygame.time.delay(delay)
@@ -114,7 +114,7 @@ class Game:
             for item in self.labyrinth.items:
                 self.visual(os.path.join(self.path_images, item["Image"]), item["x"], item["y"])
             if self.labyrinth.macgyver.items_found:
-                self.show_text(f"Items: {self.labyrinth.macgyver.items_found}", x = 2, y = 0.2)
+                self.show_text(f"Bag: {self.labyrinth.macgyver.items_found}", x=2, y=0.2)
             if self.labyrinth.macgyver.items_found == "syringe":
                 self.visual(os.path.join(self.path_images, "seringue.png"), self.macgyver.x-1, self.macgyver.y)
 

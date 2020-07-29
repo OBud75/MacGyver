@@ -115,7 +115,7 @@ class Labyrinth:
         If yes he won, else he lost
         """
         if len(self.items) == 0:
-            self.game.show_text("You won!!", size = 2, delay = 3000)
+            self.game.show_text("You won!!", x=3, size = 2, delay = 3000, G=0, B=0)
         else:
-            self.game.show_text("You lost...", size = 2, delay = 3000)
+            self.game.show_text("You lost...", x=3, size = 2, delay = 3000, G=0, B=0)
         self.game_over = True
