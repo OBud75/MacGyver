@@ -36,4 +36,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    print (len('"Name": "Plastic tube", "x": items_position[2].x, "y": items_position[2].y,'))
