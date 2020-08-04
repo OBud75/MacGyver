@@ -71,7 +71,7 @@ class Labyrinth:
 
             {"Name": "Needle", "Image": "aiguille.png",
             "x": items_position[1].x, "y": items_position[1].y},
-            
+
             {"Name": "Plastic tube", "Image": "tube_plastique.png",
             "x": items_position[2].x, "y": items_position[2].y}]
 
@@ -81,7 +81,7 @@ class Labyrinth:
 
         # Will become True when arriving point is reached
         self.game_over = False
-    
+
     def check_block(self, new_x, new_y):
         """Called when the user is trying to move
         Loop over each kind of structure to know what's in the new block
@@ -98,8 +98,8 @@ class Labyrinth:
                 return False
         for item in self.items:
             if item["x"] == new_x and item["y"] == new_y:
-                character.MacGyver.finding_item(self.macgyver, item)
                 self.items.remove(item)
+                character.MacGyver.finding_item(self.macgyver, item)
                 return True
         for passage in self.passages:
             if passage.x == new_x and passage.y == new_y:
