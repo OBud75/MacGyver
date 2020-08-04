@@ -26,16 +26,19 @@ class MacGyver:
         """
         self.labyrinth = labyrinth
         self.game = graphics.Game(self.labyrinth, self)
-        self.x = self.labyrinth.start[0].x
-        self.y = self.labyrinth.start[0].y
+        self.x = self.labyrinth.start.x
+        self.y = self.labyrinth.start.y
         self.items_found = []
 
     def interaction(self):
         """Trying to move, provisionary block is new_x and new_y
         Call check_block to know if provisionary block is available
         Then update self.x and self.y depending on the result
+        Finally, we reload the visual of the previous position
         """
-        # Getting new_x and new_y in dipend of user's input
+        old_x, old_y = self.macgyver.x, self.macgyver.y
+
+        # Gets new_x and new_y in dipend of user's input
         if self.event.key == pygame.K_UP:
             new_x, new_y = self.macgyver.x-1, self.macgyver.y
         elif self.event.key == pygame.K_DOWN:
@@ -47,9 +50,17 @@ class MacGyver:
         else:
             new_x, new_y = self.macgyver.x, self.macgyver.y
 
-        # Calling check_block
+        # Calls check_block
         if maze.Labyrinth.check_block(self.labyrinth, new_x, new_y):
             self.macgyver.x, self.macgyver.y = new_x, new_y
+        
+        # Reloads visual of the old position
+        if self.labyrinth.start.x == old_x and self.labyrinth.start.y == old_y :
+            graphics.Game.reload_block(self, old_x, old_y, block="start")
+        elif self.labyrinth.macgyver.items_found == "syringe" :
+            graphics.Game.reload_block(self, old_x, old_y, block="syringe")
+        else :
+            graphics.Game.reload_block(self, old_x, old_y, block="passage")
     
     def finding_item(self, item):
         """Method called when check_block finds an item
@@ -64,3 +75,6 @@ class MacGyver:
             self.game.show_text("You found all the items...", x=3.5 , y=5, delay=2000)
             self.game.show_text("You have created a syringe!!", x=3, y=6, delay=1000)
             self.items_found = "syringe"
+        
+        # Refresh screen to erase messages
+        graphics.Game.load_all(self)

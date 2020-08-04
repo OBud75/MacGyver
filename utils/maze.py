@@ -50,8 +50,6 @@ class Labyrinth:
         # Check every element and create appropriated structure
         self.walls = []
         self.passages = []
-        self.start = []
-        self.stop = []
         for x in range (self.height):
             for y in range (self.width):
                 if list_elmts[x][y] == "x":
@@ -60,19 +58,22 @@ class Labyrinth:
                 elif list_elmts[x][y] == "o":
                     passage = structure.Blocks(x, y)
                     self.passages.append(passage)
-                elif list_elmts[x][y] == "D":
-                    starting_point = structure.Blocks(x, y)
-                    self.start.append(starting_point)
+                elif list_elmts[x][y] == "S":
+                    self.start = structure.Blocks(x, y)
                 elif list_elmts[x][y] == "A":
-                    arrive = structure.Blocks(x, y)
-                    self.stop.append(arrive)
+                    self.arrive = structure.Blocks(x, y)
 
         # Creating items in random positions in passages
         items_position = random.choices(self.passages, k=3)
         self.items = [
-            {"Name": "Ether", "x": items_position[0].x, "y": items_position[0].y, "Image": "ether.png"},
-            {"Name": "Needle", "x": items_position[1].x, "y": items_position[1].y, "Image": "aiguille.png"},
-            {"Name": "Plastic tube",  "x": items_position[2].x, "y": items_position[2].y, "Image": "tube_plastique.png"}]
+            {"Name": "Ether", "Image": "ether.png", 
+            "x": items_position[0].x, "y": items_position[0].y},
+
+            {"Name": "Needle", "Image": "aiguille.png",
+            "x": items_position[1].x, "y": items_position[1].y},
+            
+            {"Name": "Plastic tube", "Image": "tube_plastique.png",
+            "x": items_position[2].x, "y": items_position[2].y}]
 
         # Character and display in the labyrinth
         self.macgyver = character.MacGyver(self)
@@ -103,11 +104,9 @@ class Labyrinth:
         for passage in self.passages:
             if passage.x == new_x and passage.y == new_y:
                 return True
-        for starting_point in self.start:
-            if starting_point.x == new_x and starting_point.y == new_y:
+        if self.start.x == new_x and self.start.y == new_y:
                 return True
-        for end_point in self.stop:
-            if end_point.x == new_x and end_point.y == new_y:
+        if self.arrive.x == new_x and self.arrive.y == new_y:
                 self.arriving_point()
 
     def arriving_point(self):
