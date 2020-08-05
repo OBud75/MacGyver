@@ -47,9 +47,11 @@ class Game:
         self.width_pixels = self.block_to_pixels(self.labyrinth.width)
         self.height_pixels = self.block_to_pixels(self.labyrinth.height)
 
-        # Path to images
+        # Paths to images and sounds
         self.path_images = os.path.join(
             os.path.dirname(os.path.dirname(__file__)), "Images")
+        self.path_sounds = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "Sounds")
 
         # Window settings
         self.window = pygame.display.set_mode((self.width_pixels, self.height_pixels))
@@ -164,6 +166,10 @@ class Game:
         This calls the method "interaction" of the "MacGyver" class
         """
         pygame.init()
+
+        # Load all icons and music
+        pygame.mixer.music.load(os.path.join(self.path_sounds, "music.wav"))
+        pygame.mixer.music.play()
         self.load_all()
 
         # Loop until game over
