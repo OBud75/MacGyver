@@ -47,8 +47,6 @@ class MacGyver:
             new_x, new_y = self.macgyver.x, self.macgyver.y-1
         elif self.event.key == pygame.K_RIGHT:
             new_x, new_y = self.macgyver.x, self.macgyver.y+1
-        else:
-            new_x, new_y = self.macgyver.x, self.macgyver.y
 
         # Calls check_block
         if maze.Labyrinth.check_block(self.labyrinth, new_x, new_y):
