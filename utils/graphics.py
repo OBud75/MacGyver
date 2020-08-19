@@ -18,7 +18,7 @@ For our code to be more efficient, we create a method "load_all" that will load 
 We call this method at the start of our "main_loop" and reload only MacGyver's icon at each loop
 Others blocks will be reloaded only if needed
 Pygame's "event.get()" method allows us to handle the user's inputs
-If the user presses a keyboard arrow, it will call the "interaction" method of the "character" module
+If the user presses a keyboard arrow, it will call the "interaction" method of "character" module
 """
 
 # Standard library imports
@@ -78,7 +78,7 @@ class Game:
             x_block (int): Position of the visual in blocks (raw)
             y_block (int): Position of the visual in blocks (column)
         """
-        x_pixels = self.block_to_pixels(x_block) 
+        x_pixels = self.block_to_pixels(x_block)
         y_pixels = self.block_to_pixels(y_block)
         self.window.blit(pygame.image.load(image), (y_pixels, x_pixels))
 
@@ -115,7 +115,7 @@ class Game:
         self.labyrinth.game.visual(
             os.path.join(self.labyrinth.game.path_images, "Gardien.png"),
             self.labyrinth.arrive.x, self.labyrinth.arrive.y)
-        
+
         # Walls
         for wall in self.labyrinth.walls:
             self.labyrinth.game.visual(
@@ -132,8 +132,8 @@ class Game:
         for item in self.labyrinth.items:
             self.labyrinth.game.visual(os.path.join(
                 self.labyrinth.game.path_images, item["Image"]),
-                item["x"], item["y"])
-        
+                                       item["x"], item["y"])
+
         # Display a list of items found
         if self.labyrinth.macgyver.items_found:
             self.labyrinth.game.show_text(
@@ -149,12 +149,12 @@ class Game:
             old_y (int): Previous position (column)
             block (str): Type of block we want to reload
         """
-        if block == "start" :
+        if block == "start":
             self.visual(os.path.join(self.path_images, "start_stop.png"), old_x, old_y)
-        elif block == "passage" :
+        elif block == "passage":
             self.visual(os.path.join(self.path_images, "passage.png"), old_x, old_y)
-        elif block == "syringe" :
-            for passage in self.labyrinth.passages :
+        elif block == "syringe":
+            for passage in self.labyrinth.passages:
                 self.visual(os.path.join(self.path_images, "passage.png"), passage.x, passage.y)
             self.visual(os.path.join(self.path_images, "seringue.png"), old_x, old_y)
 
@@ -173,7 +173,7 @@ class Game:
         self.load_all()
 
         # Loop until game over
-        while self.labyrinth.game_over == False:
+        while not self.labyrinth.game_over:
 
             # Visual of MacGyver
             self.visual(os.path.join(self.path_images, "MacGyver.png"),

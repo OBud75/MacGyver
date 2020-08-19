@@ -50,8 +50,8 @@ class Labyrinth:
         # Check every element and create appropriated structure
         self.walls = []
         self.passages = []
-        for x in range (self.height):
-            for y in range (self.width):
+        for x in range(self.height):
+            for y in range(self.width):
                 if list_elmts[x][y] == "x":
                     wall = structure.Blocks(x, y)
                     self.walls.append(wall)
@@ -66,14 +66,14 @@ class Labyrinth:
         # Creating items in random positions in passages
         items_position = random.choices(self.passages, k=3)
         self.items = [
-            {"Name": "Ether", "Image": "ether.png", 
-            "x": items_position[0].x, "y": items_position[0].y},
+            {"Name": "Ether", "Image": "ether.png",
+             "x": items_position[0].x, "y": items_position[0].y},
 
             {"Name": "Needle", "Image": "aiguille.png",
-            "x": items_position[1].x, "y": items_position[1].y},
+             "x": items_position[1].x, "y": items_position[1].y},
 
             {"Name": "Plastic tube", "Image": "tube_plastique.png",
-            "x": items_position[2].x, "y": items_position[2].y}]
+             "x": items_position[2].x, "y": items_position[2].y}]
 
         # Character and display in the labyrinth
         self.macgyver = character.MacGyver(self)
@@ -105,9 +105,9 @@ class Labyrinth:
             if passage.x == new_x and passage.y == new_y:
                 return True
         if self.start.x == new_x and self.start.y == new_y:
-                return True
+            return True
         if self.arrive.x == new_x and self.arrive.y == new_y:
-                self.arriving_point()
+            self.arriving_point()
 
     def arriving_point(self):
         """Check if user got all the items

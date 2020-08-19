@@ -5,8 +5,9 @@ This position is initialized at the starting point
 Another attribute is the list of items he found
 The player moves MacGyver using the keyboard arrows (keydown) handled by pygame
 This gives MacGyver a provisionary position (new_x, new_y)
-The interaction uses the "check_block" method to return the type of block in the provisionary position
-We update MacGyver's x and y if the provisionary position is a passage, the starting point, or contains an item
+The interaction uses the "check_block" method to return the type of provisionary block
+We update MacGyver's x and y if the provisionary position is:
+A passage, the starting point, or contains an item
 If the new block contains an item, we update MacGyver's "items_found" list
 If all items are found, we update MacGyver's "items_found" list to the syringe
 """
@@ -53,15 +54,15 @@ class MacGyver:
         # Calls check_block
         if maze.Labyrinth.check_block(self.labyrinth, new_x, new_y):
             self.macgyver.x, self.macgyver.y = new_x, new_y
-        
+
         # Reloads visual of the old position
-        if self.labyrinth.start.x == old_x and self.labyrinth.start.y == old_y :
+        if self.labyrinth.start.x == old_x and self.labyrinth.start.y == old_y:
             graphics.Game.reload_block(self, old_x, old_y, block="start")
-        elif self.labyrinth.macgyver.items_found == "syringe" :
+        elif self.labyrinth.macgyver.items_found == "syringe":
             graphics.Game.reload_block(self, old_x, old_y, block="syringe")
-        else :
+        else:
             graphics.Game.reload_block(self, old_x, old_y, block="passage")
-    
+
     def finding_item(self, item):
         """Method called when check_block finds an item
         If user found all the items, he create a syringe
@@ -72,9 +73,9 @@ class MacGyver:
         self.game.show_text(f"You found: {item['Name']}!!", delay=1000)
         self.items_found.append(item['Name'])
         if len(self.items_found) == 3:
-            self.game.show_text("You found all the items...", x=3.5 , y=5, delay=2000)
+            self.game.show_text("You found all the items...", x=3.5, y=5, delay=2000)
             self.game.show_text("You have created a syringe!!", x=3, y=6, delay=1000)
             self.items_found = "syringe"
-        
+
         # Refresh screen to erase messages
         graphics.Game.load_all(self)

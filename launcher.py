@@ -32,7 +32,7 @@ def main():
     """
     game = initializations()
     graphics.Game.game_loop(game)
-    
+
 
 if __name__ == "__main__":
     main()
