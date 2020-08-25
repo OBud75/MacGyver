@@ -1,11 +1,11 @@
 """Here we create the maze
-We define the class "Labyrinth"
+To do this, we define the class "Labyrinth"
 We use agregation to create a more complex object
 Labyrinth takes "game" and "macgyver" as attributes
-Standard library "random" is needed to create the items
+The "random" standard library is needed to create the items
 """
 
-# Standard library imports
+# Standard library import
 import random
 
 # Local application imports
@@ -13,29 +13,27 @@ from utils import character
 from utils import graphics
 
 class Labyrinth:
-    """We start defining the height and width by reading the .txt file we gave as argument
+    """We start defining the size by reading the .txt file we gave as an argument
     Continuing to read the file, we create a list of elements
-    We can now create instance attributes for every kind of element in the list
-    We have walls, passages, and a starting and arriving point
-    These objects are created with tuples containing their x and y
+    We can now create blocks for every kind of element in the list
+    These elements are created with tuples containing their x and y coordinate
     That correspond to the row and the column they're in
+    We have walls, passages, and a starting and arriving point
     Once this step is completed, the items can be created
     We need 3 items in random positions (they have to be in one of the passages)
     These items have a name, position (x and y), and an image associated with them
-    We can know what's in each block using the "ckeck_block" method
+    We can know what's in each block using the "check_block" method
     This method takes the position (x and y) of the block we want to check
     If the block is the arriving point, it will call the "arriving_point" method
-    If all items have been taken, the user won, else he dies and the game is resetted
-    Then this method will set "game_over" to True in order to exit the game
+    If all items have been taken, the user won, else he dies and the game is reset
+    If the user wins, this method will set "game_over" to True in order to exit the game
     """
     def __init__(self, file):
         """Create the structure of the labyrinth
-        Blocks are instances of the "Blocks" class in the "Structure" module
         'o' for passages
         'x' for walls
         'D' for departure
         'A' for arrive
-        Items are created randomly in passage positions
 
         Args:
             file (.txt): File with the draw of the labyrinth
@@ -79,8 +77,8 @@ class Labyrinth:
 
     def create_items(self):
         """In this method, we create the 3 items
-        They are displayed in random passages possitions
-        Each item is represented by a dictionnary
+        They are displayed in random passages positions
+        Each item is represented by a dictionary
         """
         items_position = random.choices(self.passages, k=3)
         self.items = [
@@ -123,7 +121,7 @@ class Labyrinth:
 
     def arriving_point(self):
         """Check if user got all the items
-        If yes he won, else he lost
+        If yes he won, or else he dies and the game restarts
         """
         if len(self.items) == 0:
             self.game.show_text("You won!!", x_block=3, size=2,
