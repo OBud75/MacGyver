@@ -2,6 +2,7 @@
 We define the class "Labyrinth"
 We use agregation to create a more complex object
 Labyrinth takes "game" and "macgyver" as attributes
+Standard library "random" is needed to create the items
 """
 
 # Standard library imports
@@ -24,7 +25,7 @@ class Labyrinth:
     We can know what's in each block using the "ckeck_block" method
     This method takes the position (x and y) of the block we want to check
     If the block is the arriving point, it will call the "arriving_point" method
-    If all items have been taken, the user won, else he lost
+    If all items have been taken, the user won, else he dies and the game is resetted
     Then this method will set "game_over" to True in order to exit the game
     """
     def __init__(self, file):
@@ -65,7 +66,22 @@ class Labyrinth:
                 elif list_elmts[x_coordinate][y_coordinate] == "A":
                     self.arrive = (x_coordinate, y_coordinate)
 
-        # Creating items in random positions in passages
+        # Character and display in the labyrinth
+        self.macgyver = character.MacGyver(self)
+        self.game = graphics.Game(self, self.macgyver)
+
+        # Will become True when arriving point is reached
+        self.game_over = False
+        self.restart = False
+
+        #Items
+        self.items = []
+
+    def create_items(self):
+        """In this method, we create the 3 items
+        They are displayed in random passages possitions
+        Each item is represented by a dictionnary
+        """
         items_position = random.choices(self.passages, k=3)
         self.items = [
             {"Name": "Ether", "Image": "ether.png",
@@ -76,13 +92,6 @@ class Labyrinth:
 
             {"Name": "Plastic tube", "Image": "tube_plastique.png",
              "x": items_position[2][0], "y": items_position[2][1]}]
-
-        # Character and display in the labyrinth
-        self.macgyver = character.MacGyver(self)
-        self.game = graphics.Game(self, self.macgyver)
-
-        # Will become True when arriving point is reached
-        self.game_over = False
 
     def check_block(self, new_x, new_y):
         """Called when the user is trying to move
@@ -110,6 +119,7 @@ class Labyrinth:
             return True
         if self.arrive[0] == new_x and self.arrive[1] == new_y:
             self.arriving_point()
+            return False
 
     def arriving_point(self):
         """Check if user got all the items
@@ -118,7 +128,8 @@ class Labyrinth:
         if len(self.items) == 0:
             self.game.show_text("You won!!", x_block=3, size=2,
                                 delay=3000, g_color=0, b_color=0)
+            self.game_over = True
         else:
             self.game.show_text("You died...", x_block=3, size=2,
                                 delay=3000, g_color=0, b_color=0)
-        self.game_over = True
+            self.restart = True
