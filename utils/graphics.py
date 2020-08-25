@@ -203,23 +203,15 @@ class Game:
         """
         pygame.init()
 
-        # Load the music the items and the graphics
+        # Load the music and the graphics
         path_sounds = os.path.join(
             os.path.dirname(os.path.dirname(__file__)), "Sounds")
         pygame.mixer.music.load(os.path.join(path_sounds, "music.wav"))
-        pygame.mixer.music.play()
-        self.labyrinth.create_items()
+        pygame.mixer.music.play(loops=-1)
         self.load_all()
 
         # Loop until game over
         while not self.labyrinth.game_over:
-
-            # If player dies
-            if self.labyrinth.restart:
-                self.macgyver.reset_position()
-                self.labyrinth.create_items()
-                self.load_all()
-                self.labyrinth.restart = False
 
             # Visual of MacGyver
             self.visual(os.path.join(self.path_images, "MacGyver.png"),
@@ -231,6 +223,11 @@ class Game:
                     self.labyrinth.game_over = True
                 elif event.type == pygame.KEYDOWN:
                     self.interaction(event.key)
+
+            # If player dies
+            if self.labyrinth.restart:
+                self.macgyver.reset_position()
+                self.labyrinth.restart = False
 
             # Update screen
             pygame.display.flip()

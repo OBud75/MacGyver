@@ -39,10 +39,9 @@ class Labyrinth:
             file (.txt): File with the draw of the labyrinth
         """
         # Define width, height and a list of all elements reading the file
-        self.file = file
         self.height = 0
         list_elmts = []
-        with open(self.file, 'r') as lab:
+        with open(file, 'r') as lab:
             for line in lab.readlines():
                 list_elmts.append(line)
                 self.height += 1
@@ -64,22 +63,7 @@ class Labyrinth:
                 elif list_elmts[x_coordinate][y_coordinate] == "A":
                     self.arrive = (x_coordinate, y_coordinate)
 
-        # Character and display in the labyrinth
-        self.macgyver = character.MacGyver(self)
-        self.game = graphics.Game(self, self.macgyver)
-
-        # Will become True when arriving point is reached
-        self.game_over = False
-        self.restart = False
-
-        #Items
-        self.items = []
-
-    def create_items(self):
-        """In this method, we create the 3 items
-        They are displayed in random passages positions
-        Each item is represented by a dictionary
-        """
+        # Items creation
         items_position = random.choices(self.passages, k=3)
         self.items = [
             {"Name": "Ether", "Image": "ether.png",
@@ -90,6 +74,14 @@ class Labyrinth:
 
             {"Name": "Plastic tube", "Image": "tube_plastique.png",
              "x": items_position[2][0], "y": items_position[2][1]}]
+
+        # Character and display of the labyrinth
+        self.macgyver = character.MacGyver(self)
+        self.game = graphics.Game(self, self.macgyver)
+
+        # Will become True when arriving point is reached
+        self.game_over = False
+        self.restart = False
 
     def check_block(self, new_x, new_y):
         """Called when the user is trying to move
@@ -131,3 +123,6 @@ class Labyrinth:
             self.game.show_text("You died...", x_block=3, size=2,
                                 delay=3000, g_color=0, b_color=0)
             self.restart = True
+
+        # Refresh screen to erase messages
+        self.game.load_all()
