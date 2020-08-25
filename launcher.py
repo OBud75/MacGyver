@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 """This file is used to launch the program
-We first initialize all the instances of ths classes
+We first initialize all the instances of the classes
 The labyrinth is an instance of the class "Labyrinth"
 It takes the .txt file where the labyrinth is draw as an argument
 The main character is an instance of the class "MacGyver"

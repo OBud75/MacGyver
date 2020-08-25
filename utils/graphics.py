@@ -1,35 +1,32 @@
-"""Here we create the game window using the "pygame" package
+"""Here we create the game window
+To do this, we define the class "Game"
 We use agregation to create a more complex object
 Game takes "macgyver" and "labyrinth" as attributes
+The "os" standard library is needed to get the path of the images and sound directories
+The "pygame" third party library is used to manage all the graphics
 """
 
-# Standard library imports
+# Standard library import
 import os
 
-# Third party imports
+# Third party import
 import pygame
 
-# Local application imports
+# Local application import
 from utils import maze
 
 class Game:
-    """The first 2 arguments are the labyrinth we want to display and Macgyver
-    Then we have the size of the window (height and width)
-    We need to decide how many pixels a block is going to take based on the size of the images
+    """We first need to settle how many pixels a block is going to take
+    We define this based on the size of the icons
     These images are stored in the "Images" directory in the main directory
     To convert blocks into pixels, we will use the "block_to_pixels" method
+    We can now define the size of the window
     We can change some window settings using "pygame" modules
     In this case, we give the window a name and an icon
     We create a "show_text" method that allow us to display text on the screen
-    We'll give this method the size, the position (x, y) of the text as arguments
-    We can add a delay (time the text is displayed and the color (RGB)
-    By default, the text will be display at the center of the screen, no delay and white
-    We now can start displaying the window with the "game_loop" method
-    Until "game_over" (see "maze" module) is False, the loop will continue
-    To display icons on the window we use the pygame's "blit" method
     We first want to create visuals for each block and item
     We do this using the "visual" method
-    This method takes the image and the position (x and y) as arguments
+    Those 2 methods use the pygame's "blit" method
     For our code to be more efficient, we create a method "load_all" that will load all the visuals
     We call this method at the start of our "main_loop" and reload only MacGyver's icon at each loop
     Others blocks will be reloaded only if needed
@@ -41,8 +38,8 @@ class Game:
         Converting blocks logic into pixels with "block_to_pixels" method
 
         Args:
-            labyrinth (object): Structure of the labyrinth
-            macgyver (object): Main character moving
+            labyrinth (instance of Labyrinth): Structure of the labyrinth
+            macgyver (instance of MacGyver): Main character moving
         """
         self.labyrinth = labyrinth
         self.macgyver = macgyver
@@ -52,20 +49,16 @@ class Game:
         self.width_pixels = self.block_to_pixels(self.labyrinth.width)
         self.height_pixels = self.block_to_pixels(self.labyrinth.height)
 
-        # Paths to images and sounds
-        self.path_images = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)), "Images")
-        self.path_sounds = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)), "Sounds")
-
         # Window settings
         self.window = pygame.display.set_mode((self.width_pixels, self.height_pixels))
         pygame.display.set_caption("MacGyver")
+        self.path_images = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "Images")
         pygame.display.set_icon(pygame.image.load(
             os.path.join(self.path_images, "MacGyver.png")))
 
     def block_to_pixels(self, block):
-        """Convert blocks to pixels
+        """Convert block logic into pixels
 
         Args:
             block (int): Value in blocks
@@ -79,7 +72,7 @@ class Game:
         """Method used to create visuals
 
         Args:
-            image (.png): Path to image
+            image (.png): Image we want to display
             x_block (int): Position of the visual in blocks (raw)
             y_block (int): Position of the visual in blocks (column)
         """
@@ -93,11 +86,13 @@ class Game:
 
         Args:
             text (str): Text to print
-            x (int): Position of the text (vertical align) in blocks
-            y (int): Position of the text (horizontal align) in blocks
+            x_blobs (int): Position of the text (vertical align) in blocks
+            y_block (int): Position of the text (horizontal align) in blocks
             size (int): Size of the text in blocks
             delay (int): Delay time while showing the text in miliseconds
-            R, G, B (int): Level of red, blue and green of the text (0 to 255)
+            r_color (int): Level of red of the text (0 to 255)
+            g_color (int): Level of green of the text (0 to 255)
+            b_color (int): Level of blue of the text (0 to 255)
         """
         font = pygame.font.Font("freesansbold.ttf", self.block_to_pixels(size))
         text = font.render(text, True, (r_color, g_color, b_color))
@@ -107,7 +102,8 @@ class Game:
 
     def load_all(self):
         """This function will be called to load the visuals for each block
-        Starting and arriving point, walls, passages, items and items found
+        Starting and arriving point, walls, passages and items
+        It will also display the list of MacGyver's items
         """
         # Starting point
         self.labyrinth.game.visual(
@@ -125,26 +121,22 @@ class Game:
         # Walls
         for wall in self.labyrinth.walls:
             self.labyrinth.game.visual(os.path.join(
-                self.labyrinth.game.path_images, "wall.png"),
-                                       wall[0], wall[1])
+                self.labyrinth.game.path_images, "wall.png"), wall[0], wall[1])
 
         # Passages
         for passage in self.labyrinth.passages:
             self.labyrinth.game.visual(os.path.join(
-                self.labyrinth.game.path_images, "passage.png"),
-                                       passage[0], passage[1])
+                self.labyrinth.game.path_images, "passage.png"), passage[0], passage[1])
 
         # Visuals of the items in the labyrinth
         for item in self.labyrinth.items:
             self.labyrinth.game.visual(os.path.join(
-                self.labyrinth.game.path_images, item["Image"]),
-                                       item["x"], item["y"])
+                self.labyrinth.game.path_images, item["Image"]), item["x"], item["y"])
 
         # Display a list of items found
         if self.labyrinth.macgyver.items_found:
             self.labyrinth.game.show_text(
-                f"Bag: {self.labyrinth.macgyver.items_found}",
-                x_block=2, y_block=0.2)
+                f"Bag: {self.labyrinth.macgyver.items_found}", x_block=2, y_block=0.2)
 
     def reload_block(self, old_x, old_y, block):
         """Method used when the user moves to reload the visual of his previous position
@@ -166,10 +158,13 @@ class Game:
             self.visual(os.path.join(self.path_images, "seringue.png"), old_x, old_y)
 
     def interaction(self, event):
-        """Trying to move, provisionary block is new_x and new_y
-        Call check_block to know if provisionary block is available
+        """Trying to move, the provisionary block is new_x and new_y
+        Call check_block to know if the provisionary block is available
         Then update self.x and self.y depending on the result
         Finally, we reload the visual of the previous position
+
+        Args:
+            event (pygame event): A key has been pressed
         """
         old_x, old_y = self.macgyver.x_block, self.macgyver.y_block
 
@@ -199,16 +194,19 @@ class Game:
 
     def game_loop(self):
         """Main game loop
-        Calling function to load the items and all the visuals
-        If the player dies, it resets the game
+        We first call functions to load the music, items and all the visuals
         Then we get the events happening (quit or keydown)
         User tries to move using the keyboard arrows (keydown)
-        This calls the method "interaction" of the "MacGyver" class
+        This calls the method "interaction"
+        We reload MacGyver's icon at each loop
+        If the user dies, we restart the game, resetting MacGyver's position and the items
         """
         pygame.init()
 
         # Load the music the items and the graphics
-        pygame.mixer.music.load(os.path.join(self.path_sounds, "music.wav"))
+        path_sounds = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "Sounds")
+        pygame.mixer.music.load(os.path.join(path_sounds, "music.wav"))
         pygame.mixer.music.play()
         self.labyrinth.create_items()
         self.load_all()
