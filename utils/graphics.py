@@ -100,8 +100,8 @@ class Game:
             R, G, B (int): Level of red, blue and green of the text (0 to 255)
         """
         font = pygame.font.Font("freesansbold.ttf", self.block_to_pixels(size))
-        self.text = font.render(text, True, (r_color, g_color, b_color))
-        self.window.blit(self.text, (self.block_to_pixels(x_block), self.block_to_pixels(y_block)))
+        text = font.render(text, True, (r_color, g_color, b_color))
+        self.window.blit(text, (self.block_to_pixels(x_block), self.block_to_pixels(y_block)))
         pygame.display.flip()
         pygame.time.delay(delay)
 
@@ -165,7 +165,7 @@ class Game:
                 self.visual(os.path.join(self.path_images, "passage.png"), passage[0], passage[1])
             self.visual(os.path.join(self.path_images, "seringue.png"), old_x, old_y)
 
-    def interaction(self):
+    def interaction(self, event):
         """Trying to move, provisionary block is new_x and new_y
         Call check_block to know if provisionary block is available
         Then update self.x and self.y depending on the result
@@ -174,16 +174,16 @@ class Game:
         old_x, old_y = self.macgyver.x_block, self.macgyver.y_block
 
         # Gets new_x and new_y in dipend of user's input
-        if self.event.key == pygame.K_UP:
+        if event == pygame.K_UP:
             new_x, new_y = self.macgyver.x_block-1, self.macgyver.y_block
-        elif self.event.key == pygame.K_DOWN:
+        elif event == pygame.K_DOWN:
             new_x, new_y = self.macgyver.x_block+1, self.macgyver.y_block
-        elif self.event.key == pygame.K_LEFT:
+        elif event == pygame.K_LEFT:
             new_x, new_y = self.macgyver.x_block, self.macgyver.y_block-1
-        elif self.event.key == pygame.K_RIGHT:
+        elif event == pygame.K_RIGHT:
             new_x, new_y = self.macgyver.x_block, self.macgyver.y_block+1
         else:
-            new_x, new_y = self.macgyver.x_pos, self.macgyver.y_pos
+            new_x, new_y = self.macgyver.x_block, self.macgyver.y_block
 
         # Calls check_block
         if maze.Labyrinth.check_block(self.labyrinth, new_x, new_y):
@@ -199,31 +199,40 @@ class Game:
 
     def game_loop(self):
         """Main game loop
-        Calling function to load all the visuals
+        Calling function to load the items and all the visuals
+        If the player dies, it resets the game
         Then we get the events happening (quit or keydown)
         User tries to move using the keyboard arrows (keydown)
         This calls the method "interaction" of the "MacGyver" class
         """
         pygame.init()
 
-        # Load the music and the graphics
+        # Load the music the items and the graphics
         pygame.mixer.music.load(os.path.join(self.path_sounds, "music.wav"))
         pygame.mixer.music.play()
+        self.labyrinth.create_items()
         self.load_all()
 
         # Loop until game over
         while not self.labyrinth.game_over:
+
+            # If player dies
+            if self.labyrinth.restart:
+                self.macgyver.reset_position()
+                self.labyrinth.create_items()
+                self.load_all()
+                self.labyrinth.restart = False
 
             # Visual of MacGyver
             self.visual(os.path.join(self.path_images, "MacGyver.png"),
                         self.macgyver.x_block, self.macgyver.y_block)
 
             # Event handler
-            for self.event in pygame.event.get():
-                if self.event.type == pygame.QUIT:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     self.labyrinth.game_over = True
-                elif self.event.type == pygame.KEYDOWN:
-                    self.interaction()
+                elif event.type == pygame.KEYDOWN:
+                    self.interaction(event.key)
 
             # Update screen
             pygame.display.flip()

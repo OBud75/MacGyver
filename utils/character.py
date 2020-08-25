@@ -27,6 +27,12 @@ class MacGyver:
         self.y_block = self.labyrinth.start[1]
         self.items_found = []
 
+    def reset_position(self):
+        """We will need this method if the user dies
+        """
+        self.x_block = self.labyrinth.start[0]
+        self.y_block = self.labyrinth.start[1]
+
     def finding_item(self, item):
         """Method called when check_block finds an item
         If user found all the items, he create a syringe
