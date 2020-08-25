@@ -52,4 +52,4 @@ class MacGyver:
             self.items_found = "syringe"
 
         # Refresh screen to erase messages
-        graphics.Game.load_all(self)
+        self.game.load_all()
