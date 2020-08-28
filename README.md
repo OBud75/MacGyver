@@ -36,9 +36,11 @@ Install python3 (https://www.python.org/downloads)
 
 Open terminal in MacGyver directory
 
-'python3 -m venv env'
+'python -m venv env' (Windows)
 
-'source env/Scripts/activate' (Window)
+'python3 -m venv env' (Unix)
+
+'source env/Scripts/activate' (Windows)
 
 'source env/bin/activate' (Unix)
 
