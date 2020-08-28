@@ -11,6 +11,7 @@ import random
 # Local application imports
 from utils import character
 from utils import graphics
+from utils import constants
 
 class Labyrinth:
     """We start defining the size by reading the .txt file we gave as an argument
@@ -66,13 +67,13 @@ class Labyrinth:
         # Items creation
         items_position = random.choices(self.passages, k=3)
         self.items = [
-            {"Name": "Ether", "Image": "ether.png",
+            {"Name": "Ether", "Image": constants.ETHER_IMAGE,
              "x": items_position[0][0], "y": items_position[0][1]},
 
-            {"Name": "Needle", "Image": "aiguille.png",
+            {"Name": "Needle", "Image": constants.NEEDLE_IMAGE,
              "x": items_position[1][0], "y": items_position[1][1]},
 
-            {"Name": "Plastic tube", "Image": "tube_plastique.png",
+            {"Name": "Plastic tube", "Image": constants.PLASTIC_TUBE_IMAGE,
              "x": items_position[2][0], "y": items_position[2][1]}]
 
         # Character and display of the labyrinth
