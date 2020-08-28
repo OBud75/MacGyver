@@ -68,7 +68,7 @@ class Game:
 
         Args:
             image (.png): Image we want to display
-            x_block (int): Position of the visual in blocks (raw)
+            x_block (int): Position of the visual in blocks (row)
             y_block (int): Position of the visual in blocks (column)
         """
         x_pixels = self.block_to_pixels(x_block)

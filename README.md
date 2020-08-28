@@ -27,7 +27,9 @@ If he doesn't collect all the items and he arrives at the guard, he dies (life i
 The game will be standalone, meaning it can be executed on any computer.
 
 #### Download files
-'git clone https://github.com/OBud75/MacGyver.git'
+'https://github.com/OBud75/MacGyver', code, download zip and extract all
+
+Or from terminal: 'git clone https://github.com/OBud75/MacGyver.git'
 
 ##### How to start game
 Install python3 (https://www.python.org/downloads)
