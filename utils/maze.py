@@ -65,6 +65,20 @@ class Labyrinth:
                     self.arrive = (x_coordinate, y_coordinate)
 
         # Items creation
+        self.create_items()
+
+        # Character and display of the labyrinth
+        self.macgyver = character.MacGyver(self)
+        self.game = graphics.Game(self, self.macgyver)
+
+        # Will become True when arriving point is reached
+        self.game_over = False
+        self.restart = False
+
+    def create_items(self):
+        """This method is called to create the items in 3 random position
+        All the items have a random position in passages and and image associated
+        """
         items_position = random.choices(self.passages, k=3)
         self.items = [
             {"Name": "Ether", "Image": constants.ETHER_IMAGE,
@@ -75,14 +89,6 @@ class Labyrinth:
 
             {"Name": "Plastic tube", "Image": constants.PLASTIC_TUBE_IMAGE,
              "x": items_position[2][0], "y": items_position[2][1]}]
-
-        # Character and display of the labyrinth
-        self.macgyver = character.MacGyver(self)
-        self.game = graphics.Game(self, self.macgyver)
-
-        # Will become True when arriving point is reached
-        self.game_over = False
-        self.restart = False
 
     def check_block(self, new_x, new_y):
         """Called when the user is trying to move
@@ -111,6 +117,7 @@ class Labyrinth:
         if self.arrive[0] == new_x and self.arrive[1] == new_y:
             self.arriving_point()
             return False
+        return None
 
     def arriving_point(self):
         """Check if user got all the items
@@ -124,6 +131,3 @@ class Labyrinth:
             self.game.show_text("You died...", x_block=3, size=2,
                                 delay=3000, g_color=0, b_color=0)
             self.restart = True
-
-        # Refresh screen to erase messages
-        self.game.load_all()

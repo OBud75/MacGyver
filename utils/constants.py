@@ -13,7 +13,7 @@ PATH_SOUNDS = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Sounds")
 # Images files
 MACGYVER_IMAGE = os.path.join(PATH_IMAGES, "MacGyver.png")
 GUARDIAN_IMAGE = os.path.join(PATH_IMAGES, "Gardien.png")
-START_STOP_IMAGE = os.path.join(PATH_IMAGES, "start_stop.png")
+START_IMAGE = os.path.join(PATH_IMAGES, "start_stop.png")
 WALL_IMAGE = os.path.join(PATH_IMAGES, "wall.png")
 PASSAGE_IMAGE = os.path.join(PATH_IMAGES, "passage.png")
 ETHER_IMAGE = os.path.join(PATH_IMAGES, "ether.png")

@@ -17,7 +17,6 @@ from utils import maze
 class Game:
     """We first need to settle how many pixels a block is going to take
     We define this based on the size of the icons with the "PIL.Image" module
-    These images are stored in the "Images" directory in the main directory
     To convert blocks into pixels, we will use the "block_to_pixels" method
     We can now define the size of the window
     We can change some window settings using "pygame" modules
@@ -69,7 +68,7 @@ class Game:
 
         Args:
             image (.png): Image we want to display
-            x_block (int): Position of the visual in blocks (raw)
+            x_block (int): Position of the visual in blocks (row)
             y_block (int): Position of the visual in blocks (column)
         """
         x_pixels = self.block_to_pixels(x_block)
@@ -102,12 +101,10 @@ class Game:
         It will also display the list of MacGyver's items
         """
         # Starting point
-        self.labyrinth.game.visual(constants.START_STOP_IMAGE,
+        self.labyrinth.game.visual(constants.START_IMAGE,
                                    self.labyrinth.start[0], self.labyrinth.start[1])
 
         # Arriving point
-        self.labyrinth.game.visual(constants.START_STOP_IMAGE,
-                                   self.labyrinth.arrive[0], self.labyrinth.arrive[1])
         self.labyrinth.game.visual(constants.GUARDIAN_IMAGE,
                                    self.labyrinth.arrive[0], self.labyrinth.arrive[1])
 
@@ -139,7 +136,7 @@ class Game:
             block (str): Type of block we want to reload
         """
         if block == "start":
-            self.visual(constants.START_STOP_IMAGE, old_x, old_y)
+            self.visual(constants.START_IMAGE, old_x, old_y)
         elif block == "passage":
             self.visual(constants.PASSAGE_IMAGE, old_x, old_y)
         elif block == "syringe":
@@ -213,7 +210,10 @@ class Game:
 
             # If player dies
             if self.labyrinth.restart:
-                self.macgyver.reset_position()
+                self.macgyver.initial_position()
+                self.labyrinth.macgyver.items_found = []
+                self.labyrinth.create_items()
+                self.load_all()
                 self.labyrinth.restart = False
 
             # Update screen

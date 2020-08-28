@@ -22,13 +22,11 @@ class MacGyver:
         """
         self.labyrinth = labyrinth
         self.game = graphics.Game(self.labyrinth, self)
-        self.x_block = self.labyrinth.start[0]
-        self.y_block = self.labyrinth.start[1]
+        self.initial_position()
         self.items_found = []
 
-    def reset_position(self):
-        """We will need this method if the user dies
-        It resets MacGyver's position at the starting point
+    def initial_position(self):
+        """Set MacGyver at the starting point
         """
         self.x_block = self.labyrinth.start[0]
         self.y_block = self.labyrinth.start[1]
