@@ -2,19 +2,16 @@
 To do this, we define the class "Game"
 We use agregation to create a more complex object
 Game takes "macgyver" and "labyrinth" as attributes
-The "os" standard library is needed to get the path of the images and sound directories
 The "pygame" third party library is used to manage all the graphics
 The "PIL" third party library is used to settle the size of a block
 """
-
-# Standard library import
-import os
 
 # Third party import
 from PIL import Image
 import pygame
 
 # Local application import
+from utils import constants
 from utils import maze
 
 class Game:
@@ -46,20 +43,15 @@ class Game:
         self.labyrinth = labyrinth
         self.macgyver = macgyver
 
-        # Path to images
-        self.path_images = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)), "Images")
-
         # Width and height of the window
-        self.block_size = Image.open(os.path.join(self.path_images, "wall.png")).size[0]
+        self.block_size = Image.open(constants.WALL_IMAGE).size[0]
         width_pixels = self.block_to_pixels(self.labyrinth.width)
         height_pixels = self.block_to_pixels(self.labyrinth.height)
 
         # Window settings
         self.window = pygame.display.set_mode((width_pixels, height_pixels))
         pygame.display.set_caption("MacGyver")
-        pygame.display.set_icon(pygame.image.load(
-            os.path.join(self.path_images, "MacGyver.png")))
+        pygame.display.set_icon(pygame.image.load(constants.MACGYVER_IMAGE))
 
     def block_to_pixels(self, block):
         """Convert block logic into pixels
@@ -110,32 +102,26 @@ class Game:
         It will also display the list of MacGyver's items
         """
         # Starting point
-        self.labyrinth.game.visual(
-            os.path.join(self.labyrinth.game.path_images, "start_stop.png"),
-            self.labyrinth.start[0], self.labyrinth.start[1])
+        self.labyrinth.game.visual(constants.START_STOP_IMAGE,
+                                   self.labyrinth.start[0], self.labyrinth.start[1])
 
         # Arriving point
-        self.labyrinth.game.visual(
-            os.path.join(self.labyrinth.game.path_images, "start_stop.png"),
-            self.labyrinth.arrive[0], self.labyrinth.arrive[1])
-        self.labyrinth.game.visual(
-            os.path.join(self.labyrinth.game.path_images, "Gardien.png"),
-            self.labyrinth.arrive[0], self.labyrinth.arrive[1])
+        self.labyrinth.game.visual(constants.START_STOP_IMAGE,
+                                   self.labyrinth.arrive[0], self.labyrinth.arrive[1])
+        self.labyrinth.game.visual(constants.GUARDIAN_IMAGE,
+                                   self.labyrinth.arrive[0], self.labyrinth.arrive[1])
 
         # Walls
         for wall in self.labyrinth.walls:
-            self.labyrinth.game.visual(os.path.join(
-                self.labyrinth.game.path_images, "wall.png"), wall[0], wall[1])
+            self.labyrinth.game.visual(constants.WALL_IMAGE, wall[0], wall[1])
 
         # Passages
         for passage in self.labyrinth.passages:
-            self.labyrinth.game.visual(os.path.join(
-                self.labyrinth.game.path_images, "passage.png"), passage[0], passage[1])
+            self.labyrinth.game.visual(constants.PASSAGE_IMAGE, passage[0], passage[1])
 
         # Visuals of the items in the labyrinth
         for item in self.labyrinth.items:
-            self.labyrinth.game.visual(os.path.join(
-                self.labyrinth.game.path_images, item["Image"]), item["x"], item["y"])
+            self.labyrinth.game.visual(item["Image"], item["x"], item["y"])
 
         # Display a list of items found
         if self.labyrinth.macgyver.items_found:
@@ -153,13 +139,13 @@ class Game:
             block (str): Type of block we want to reload
         """
         if block == "start":
-            self.visual(os.path.join(self.path_images, "start_stop.png"), old_x, old_y)
+            self.visual(constants.START_STOP_IMAGE, old_x, old_y)
         elif block == "passage":
-            self.visual(os.path.join(self.path_images, "passage.png"), old_x, old_y)
+            self.visual(constants.PASSAGE_IMAGE, old_x, old_y)
         elif block == "syringe":
             for passage in self.labyrinth.passages:
-                self.visual(os.path.join(self.path_images, "passage.png"), passage[0], passage[1])
-            self.visual(os.path.join(self.path_images, "seringue.png"), old_x, old_y)
+                self.visual(constants.PASSAGE_IMAGE, passage[0], passage[1])
+            self.visual(constants.SYRINGE_IMAGE, old_x, old_y)
 
     def interaction(self, event):
         """Trying to move, the provisionary block is new_x and new_y
@@ -208,9 +194,7 @@ class Game:
         pygame.init()
 
         # Load the music and the graphics
-        path_sounds = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)), "Sounds")
-        pygame.mixer.music.load(os.path.join(path_sounds, "music.wav"))
+        pygame.mixer.music.load(constants.MUSIC)
         pygame.mixer.music.play(loops=-1)
         self.load_all()
 
@@ -218,8 +202,7 @@ class Game:
         while not self.labyrinth.game_over:
 
             # Visual of MacGyver
-            self.visual(os.path.join(self.path_images, "MacGyver.png"),
-                        self.macgyver.x_block, self.macgyver.y_block)
+            self.visual(constants.MACGYVER_IMAGE, self.macgyver.x_block, self.macgyver.y_block)
 
             # Event handler
             for event in pygame.event.get():
