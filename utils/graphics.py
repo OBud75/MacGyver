@@ -4,12 +4,14 @@ We use agregation to create a more complex object
 Game takes "macgyver" and "labyrinth" as attributes
 The "os" standard library is needed to get the path of the images and sound directories
 The "pygame" third party library is used to manage all the graphics
+The "PIL" third party library is used to settle the size of a block
 """
 
 # Standard library import
 import os
 
 # Third party import
+from PIL import Image
 import pygame
 
 # Local application import
@@ -17,7 +19,7 @@ from utils import maze
 
 class Game:
     """We first need to settle how many pixels a block is going to take
-    We define this based on the size of the icons
+    We define this based on the size of the icons with the "PIL.Image" module
     These images are stored in the "Images" directory in the main directory
     To convert blocks into pixels, we will use the "block_to_pixels" method
     We can now define the size of the window
@@ -44,16 +46,18 @@ class Game:
         self.labyrinth = labyrinth
         self.macgyver = macgyver
 
-        # Width and height of the window
-        self.block_size = 43
-        self.width_pixels = self.block_to_pixels(self.labyrinth.width)
-        self.height_pixels = self.block_to_pixels(self.labyrinth.height)
-
-        # Window settings
-        self.window = pygame.display.set_mode((self.width_pixels, self.height_pixels))
-        pygame.display.set_caption("MacGyver")
+        # Path to images
         self.path_images = os.path.join(
             os.path.dirname(os.path.dirname(__file__)), "Images")
+
+        # Width and height of the window
+        self.block_size = Image.open(os.path.join(self.path_images, "wall.png")).size[0]
+        width_pixels = self.block_to_pixels(self.labyrinth.width)
+        height_pixels = self.block_to_pixels(self.labyrinth.height)
+
+        # Window settings
+        self.window = pygame.display.set_mode((width_pixels, height_pixels))
+        pygame.display.set_caption("MacGyver")
         pygame.display.set_icon(pygame.image.load(
             os.path.join(self.path_images, "MacGyver.png")))
 
