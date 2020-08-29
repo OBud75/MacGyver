@@ -65,6 +65,23 @@ class Labyrinth:
                     self.arrive = (x_coordinate, y_coordinate)
 
         # Items creation
+        self.create_items()
+
+        # Character and display of the labyrinth
+        self.macgyver = character.MacGyver(self)
+        self.game = graphics.Game(self, self.macgyver)
+
+        # Will become True when arriving point is reached
+        self.game_over = False
+        self.restart = False
+
+    def create_items(self):
+        """This method is called to create the items in 3 random position
+        All items have a random position in passages and and image associated
+
+        Returns:
+            List: List of dictionaries contaning the informations of the items
+        """
         items_position = random.choices(self.passages, k=3)
         self.items = [
             {"Name": "Ether", "Image": constants.ETHER_IMAGE,
@@ -75,14 +92,7 @@ class Labyrinth:
 
             {"Name": "Plastic tube", "Image": constants.PLASTIC_TUBE_IMAGE,
              "x": items_position[2][0], "y": items_position[2][1]}]
-
-        # Character and display of the labyrinth
-        self.macgyver = character.MacGyver(self)
-        self.game = graphics.Game(self, self.macgyver)
-
-        # Will become True when arriving point is reached
-        self.game_over = False
-        self.restart = False
+        return self.items
 
     def check_block(self, new_x, new_y):
         """Called when the user is trying to move

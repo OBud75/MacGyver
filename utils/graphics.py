@@ -211,6 +211,9 @@ class Game:
             # If player dies
             if self.labyrinth.restart:
                 self.macgyver.reset_position()
+                self.labyrinth.macgyver.items_found = []
+                self.labyrinth.create_items()
+                self.load_all()
                 self.labyrinth.restart = False
 
             # Update screen
