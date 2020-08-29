@@ -134,6 +134,3 @@ class Labyrinth:
             self.game.show_text("You died...", x_block=3, size=2,
                                 delay=3000, g_color=0, b_color=0)
             self.restart = True
-
-        # Refresh screen to erase messages
-        self.game.load_all()
