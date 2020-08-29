@@ -77,7 +77,7 @@ class Labyrinth:
 
     def create_items(self):
         """This method is called to create the items in 3 random position
-        All items have a random position in passages and and image associated
+        All the items have a random position in passages and and image associated
         """
         items_position = random.choices(self.passages, k=3)
         self.items = [
@@ -117,6 +117,7 @@ class Labyrinth:
         if self.arrive[0] == new_x and self.arrive[1] == new_y:
             self.arriving_point()
             return False
+        return None
 
     def arriving_point(self):
         """Check if user got all the items
